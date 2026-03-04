@@ -7,6 +7,8 @@ import java.util.List;
 public class Section {
     private String name;
     private List<User> allowedUsers; //permissão de mudar
+    private int upTime;
+    this List<Device> devices;
 
     /**
      * Represents a section (room) in a house with a name and a list of allowed users.
@@ -15,14 +17,23 @@ public class Section {
      * @param allowedUsers the list of allowed users
      */
     
+    public Section(String name, List<User> allowedUsers, List<Device> devices) {
+        this.name = name;
+        this.allowedUsers = new ArrayList<>(allowedUsers);
+        this.devices = devices;
+
+    }
+
     public Section(String name, List<User> allowedUsers) {
         this.name = name;
         this.allowedUsers = new ArrayList<>(allowedUsers);
+        this.devices = new ArrayList<>();
     }
 
     public Section(String name) {
         this.name = name;
         this.allowedUsers = new ArrayList<>();
+        this.devices = new ArrayList<>();
     }
 
     /**
@@ -43,4 +54,5 @@ public class Section {
     public boolean isUserAllowed(User user) {
         return allowedUsers.contains(user);
     }
+
 }
