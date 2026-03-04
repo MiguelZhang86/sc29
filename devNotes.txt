@@ -1,0 +1,47 @@
+Metodos
+
+Cliente (Teresa)
+
+Metodo 
+
+connectar (log + autenticar)
+
+auth
+
+create
+add
+rd
+rc
+rt
+rh
+
+Enviar
+
+Server (Miguel)
+-lista casas
+
+Iniciar (log)
+connectar (auth)
+create
+add
+rd
+rc
+rt
+rh
+
+Enviar
+
+Serialize
+
+Serialização
+Desserialização
+
+Logica do negocio (Jaime)
+
+Casa
+-Lista de divisões
+Divisão
+-Permissoes utilizadores (lista de users)
++UtilPodeMecher(utilizador)
+Utilizador
+-nome
