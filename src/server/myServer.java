@@ -1,7 +1,9 @@
+package server;
+
 /***************************************************************************
 *   Seguranca e Confiabilidade 2025/26
 *   Cliente da tp01 (ou da 00 nao me lembro)
-*	Boa sorte Teresa :p
+*	Boa sorte Miguel :p
 ***************************************************************************/
 
 import java.io.IOException;
@@ -21,27 +23,21 @@ public class myServer{
 	}
 
 	public void startServer (){
-		ServerSocket sSoc = null;
-        
-		try {
-			sSoc = new ServerSocket(23456);
+		try (ServerSocket sSoc = new ServerSocket(23456)) {
+			while(true) {
+				try {
+					Socket inSoc = sSoc.accept();
+					ServerThread newServerThread = new ServerThread(inSoc);
+					newServerThread.start();
+			    }
+			    catch (IOException e) {
+			        e.printStackTrace();
+			    }
+			}
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 			System.exit(-1);
 		}
-         
-		while(true) {
-			try {
-				Socket inSoc = sSoc.accept();
-				ServerThread newServerThread = new ServerThread(inSoc);
-				newServerThread.start();
-		    }
-		    catch (IOException e) {
-		        e.printStackTrace();
-		    }
-		    
-		}
-		//sSoc.close();
 	}
 
 
@@ -56,39 +52,52 @@ public class myServer{
 		}
  
 		public void run(){
-			try {
-				ObjectOutputStream outStream = new ObjectOutputStream(socket.getOutputStream());
-				ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
+			try (ObjectOutputStream outStream = new ObjectOutputStream(socket.getOutputStream());
+				 ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream())) {
+				while (true) {
+					Object request;
+					try {
+						request = inStream.readObject();
+					} catch (ClassNotFoundException e) {
+						outStream.writeObject("ERRO: formato de mensagem invalido");
+						outStream.flush();
+						continue;
+					}
 
-				String user = null;
-				String passwd = null;
-			
-				try {
-					user = (String)inStream.readObject();
-					passwd = (String)inStream.readObject();
-					System.out.println("thread: depois de receber a password e o user");
-				}catch (ClassNotFoundException e1) {
-					e1.printStackTrace();
-				}
- 			
-				//TODO: refazer
-				//este codigo apenas exemplifica a comunicacao entre o cliente e o servidor
-				//nao faz qualquer tipo de autenticacao
-				if (user.length() != 0){
-					outStream.writeObject(new Boolean(true));
-				}
-				else {
-					outStream.writeObject(new Boolean(false));
-				}
+					if (!(request instanceof String msg)) {
+						outStream.writeObject("ERRO: apenas mensagens de texto sao suportadas");
+						outStream.flush();
+						continue;
+					}
 
-				outStream.close();
-				inStream.close();
- 			
-				socket.close();
+					if ("quit".equalsIgnoreCase(msg.trim())) {
+						outStream.writeObject("BYE");
+						outStream.flush();
+						break;
+					}
+
+					String reply = "Resposta: " + processRequest(msg);
+					outStream.writeObject(reply);
+					outStream.flush();
+				}
 
 			} catch (IOException e) {
 				e.printStackTrace();
+			} finally {
+				try {
+					socket.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
+
+	private String processRequest(String request) {
+		String[] arguments = request.split(" ");
+		if (arguments.length == 0) {
+			return "ERRO: comando vazio";
+		}
+		return request.toUpperCase()+ "eheheheh ronaldinho soccer";
+		}
 }

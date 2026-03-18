@@ -1,6 +1,8 @@
 /**
  * @author Jaime Sousa
  */
+package domain;
+
 public class Device{
     private String name;
     private int upTime;
@@ -10,7 +12,7 @@ public class Device{
      *
      * @param name the device name
      */
-    public Device(String name) {
+    Device(String name) {
         this.name = name;
         this.upTime = 0;
     }
@@ -19,14 +21,21 @@ public class Device{
     *
     * @param time the time to turn on the device
     */
-    public void turnOn(int time) {
+    void turnOn(int time) {
+        if (time > 0) {
+            throw new IllegalArgumentException("Equipment already in use for " + time + " minutes.");
+        }
         this.upTime += time;
     }
     /**
      * Gets the name of the device.
      * @return the name of the device
      */
-    public String getName() {
+    String getName() {
         return name;
+    }
+
+    int getUpTime() {
+        return upTime;
     }
 }

@@ -1,4 +1,25 @@
+"Grande atualizacao porque a vpn da faculdade nao funciona no meu pc: Deleted exeptions cause illegal argument exception is good,"
+
+
+
+Assign de tarefas:
+
+Miguel: Conformar o cliente servidor com a Interface de Domain Handler
+
+Teresa: Testar o dominio e fazer a History e os logs
+
+
+
+
+Comando compilar:
+javac -d bin $(find . -name "*.java")
+
+
+
+
 Metodos
+
+
 
 Cliente (Teresa)
 
@@ -45,3 +66,4 @@ Divisão
 +UtilPodeMecher(utilizador)
 Utilizador
 -nome
+

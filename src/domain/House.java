@@ -1,4 +1,9 @@
-import java.util.ArrayList;
+/**
+ * @author Jaime Sousa
+ */
+package domain;
+
+import java.util.LinkedList;
 import java.util.List;
 
 public class House {
@@ -13,9 +18,15 @@ public class House {
 	 * @param sections the sections (rooms) of the house
 	 * @param owner the owner of the house
 	 */
-	public House(String name, List<Section> sections, User owner) {
+	House(String name, List<Section> sections, User owner) {
 		this.name = name;
-		this.sections = new ArrayList<Section>();
+		this.sections = new LinkedList<Section>(sections);
+		this.owner = owner;
+	}
+
+	House(String name, User owner) {
+		this.name = name;
+		this.sections = new LinkedList<Section>();
 		this.owner = owner;
 	}
 
@@ -24,7 +35,7 @@ public class House {
 	 *
 	 * @return the house name
 	 */
-	public String getName() {
+	String getName() {
 		return name;
 	}
 
@@ -34,17 +45,74 @@ public class House {
 	 * @param user the user to check
 	 * @return true if the user is the owner, false otherwise
 	 */
-	public boolean isOwner(User user) {
+	boolean isOwner(User user) {
 		return this.owner.equals(user);
 	}
-
 	/**
-	 * Gets a copy of the house sections list.
-	 *
-	 * @return a new list containing all sections
+	 * Allows a user to access the devices of specific section of the house.
+	 * 
+	 * @param owner the user attempting to allow access (must be the house owner)
+	 * @param user the user to allow
+	 * @param sectionName the name of the section to which to allow the user access
 	 */
-	public List<Section> getSections() {
-		return new ArrayList<>(sections);
+	void allowUser(User owner, User user, String  sectionName) {
+		if (isOwner(owner)) {
+			for (Section s : sections) {
+				if (s.getName().equals(sectionName)) {
+					s.addAllowedUser(user);
+					break;
+				}
+			}
+		}
+	}
+	/**
+	 * Disallows a user from accessing the devices of specific section of the house.
+	 *
+	 * @param owner the user attempting to disallow access (must be the house owner)
+	 * @param user the user to disallow
+	 * @param sectionName the name of the section from which to disallow the user
+	 */
+	void disallowUser(User owner, User user, String  sectionName) {
+		if (isOwner(owner)) {
+			for (Section s : sections) {
+				if (s.getName().equals(sectionName)) {
+					s.removeAllowedUser(user);
+					break;
+				}
+			}
+		}
+	}
+
+	boolean isUserAllowed(User user, String deviceName) {
+		for (Section s : sections) {
+			if (s.hasDevice(deviceName) && (s.isUserAllowed(user) || isOwner(user))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	boolean turnOnDevice(User user, String deviceName, int time) {
+		for (Section s : sections) {
+			if(s.turnOnDevice(deviceName, time, user)) {
+				return true;
+				
+			}
+			
+			
+		}
+		return false;
+	}
+
+	int getDeviceUpTime(String deviceName) {
+		for (Section s : sections) {
+			try {
+				return s.getDeviceUpTime(deviceName);
+			} catch (IllegalArgumentException e) {
+				// Device not found in this section, continue searching
+			}
+		}
+		throw new IllegalArgumentException("Device not found in any section of the house");
 	}
 
 	/**
@@ -52,7 +120,7 @@ public class House {
 	 *
 	 * @param section the section to add
 	 */
-	public void addSection(Section section) {
+	void addSection(Section section) {
 		sections.add(section);
 	}
 
@@ -61,8 +129,28 @@ public class House {
 	 *
 	 * @param sections the sections to add
 	 */
-	public void addSections(List<Section> sections) {
+	void addSections(List<Section> sections) {
 		this.sections.addAll(sections);
 	}
+
+	List<Section> getSections() {
+		return sections;
+	}
+
+	boolean isUserAllowedInAllSections(User user) {
+		if (isOwner(user)) {
+			return true;
+		}
+		for (Section s : sections) {
+			if (!s.isUserAllowed(user)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	
+
+
 }
 
