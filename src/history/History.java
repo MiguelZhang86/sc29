@@ -36,8 +36,8 @@ public class History implements IHistory {
     // (estados/temporizações) enviado a cada dispositivo da casa <hm>, desde
     // que o utilizador tenha permissões.
     @Override
-    public String getLastCommand(String houseName) {
-        if(!DomainHandler.getInstance().isUserAllowed(houseName, "")) {
+    public String getLastCommand(DomainHandler domainHandler, String houseName) {
+        if(!domainHandler.isUserAllowed(houseName, "")) {
             throw new IllegalArgumentException("User is not allowed to access all sections in the house");
         }
         
@@ -66,8 +66,8 @@ public class History implements IHistory {
     }
 
     @Override
-    public String getHistory(String houseName, String deviceName) {
-        if (!DomainHandler.getInstance().isUserAllowed(houseName, deviceName)) {
+    public String getHistory(DomainHandler domainHandler, String houseName, String deviceName) {
+        if (!domainHandler.isUserAllowed(houseName, deviceName)) {
             return "User is not allowed to access this section";
         }
         File file = new File(BASE_DIR + houseName + "/" + deviceName + ".csv");

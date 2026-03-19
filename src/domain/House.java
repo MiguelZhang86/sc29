@@ -15,19 +15,21 @@ public class House {
 	 * Creates a house with a name, sections (rooms) and an owner.
 	 *
 	 * @param name the house name
-	 * @param sections the sections (rooms) of the house
 	 * @param owner the owner of the house
 	 */
-	House(String name, List<Section> sections, User owner) {
-		this.name = name;
-		this.sections = new LinkedList<Section>(sections);
-		this.owner = owner;
-	}
-
+	
 	House(String name, User owner) {
 		this.name = name;
 		this.sections = new LinkedList<Section>();
 		this.owner = owner;
+
+
+		this.sections.add(new Section("Electros"));
+		this.sections.add(new Section("Garden"));
+		this.sections.add(new Section("Luzes"));
+		this.sections.add(new Section("Multimedia"));
+		this.sections.add(new Section("Portas"));
+		this.sections.add(new Section("Stores"));
 	}
 
 	/**

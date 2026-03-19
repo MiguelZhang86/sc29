@@ -112,7 +112,11 @@ public class Section {
                 throw new IllegalArgumentException("Device already exists in this section");
             }
         }
-        devices.add(new Device(deviceName));
+        devices.add(new Device(generateDeviceName()));
+    }
+    //gera o d1 ou o m1 dependendo do nome da secção
+    private String generateDeviceName() {
+        return this.name.charAt(0) + String.valueOf(devicesCount()+1);
     }
 
     boolean hasDevice(String deviceName) {

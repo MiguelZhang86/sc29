@@ -1,4 +1,18 @@
-"Grande atualizacao porque a vpn da faculdade nao funciona no meu pc: Deleted exeptions cause illegal argument exception is good,"
+Next commit message: "removi o metodo get User by username"
+
+
+Nomes automaticos (1,2,3)
+Nova casa vem automaticamente com secções dadas no enunciado
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -20,7 +34,7 @@ javac -d bin $(find . -name "*.java")
 Metodos
 
 
-
+RD <hm> <s> # Registar um Dispositivo na casa <hm>, na seção <s>
 Cliente (Teresa)
 
 Metodo 
