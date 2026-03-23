@@ -1,4 +1,4 @@
-Next commit message: "Criei o authResult, Fiz o user imutavel"
+Next commit message: "Migração do github, Fiz o user imutavel, implementei autenticação"
 
 
 

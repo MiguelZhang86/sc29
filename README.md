@@ -67,7 +67,7 @@ java -cp bin server.SpertaClient 127.0.0.1 23456
 1. Inicia o servidor.
 2. Inicia um ou mais clientes.
 3. Envia comandos pelo cliente.
-4. Escreve `quit` no cliente para terminar a sessao.
+4. Usa `Ctrl+C` no terminal do cliente para terminar a sessao.
 
 ## Compilacao limpa (opcional)
 

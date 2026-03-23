@@ -19,6 +19,8 @@ package server;
     public static void main(String[] args) {
         String host = DEFAULT_HOST;
         int port = DEFAULT_PORT;
+        String username = null;
+        String password = null;
         if (args.length >= 1) {
             host = args[0];
         }
@@ -30,17 +32,35 @@ package server;
                 port = DEFAULT_PORT;
             }
         }
+        if(args.length == 4) {
+            username = args[2];
+            password = args[3];
+        }
 
         Scanner sc = new Scanner(System.in);
-        new SpertaClient().chat(host, port, sc);
+        new SpertaClient().chat(host, port, sc, username, password);
     }
 
-    public void chat(String host, int port, Scanner sc) {
+    public void chat(String host, int port, Scanner sc, String username, String password) {
         try (Socket socket = new Socket(host, port);
              ObjectOutputStream outStream = new ObjectOutputStream(socket.getOutputStream());
              ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream())) {
 
-            System.out.println("Ligado ao servidor. Escreve mensagens e Enter para enviar. 'quit' para sair.");
+            // Caso especial: se o cliente fornecer username e password como argumentos, tenta autenticar logo no inicio
+            if(username != null && password != null) {
+                outStream.writeObject(username + " " + password);
+                outStream.flush();
+
+                Object authResponse = inStream.readObject();
+                if (authResponse instanceof String textResponse) {
+                    System.out.println("Resposta de autenticacao: " + textResponse);
+                } else {
+                    System.out.println("Resposta inesperada do servidor: " + authResponse);
+                    return;
+                }
+            }
+
+            System.out.println("Ligado ao servidor. Escreve mensagens e Enter para enviar. Ctrl+C para sair.");
 
             while (true) {
                 System.out.print("> ");
@@ -52,9 +72,6 @@ package server;
                 Object serverResponse = inStream.readObject();
                 if (serverResponse instanceof String textResponse) {
                     System.out.println(textResponse);
-                    if ("BYE".equals(textResponse)) {
-                        break;
-                    }
                 } else {
                     System.out.println("Resposta inesperada do servidor: " + serverResponse);
                     break;

@@ -7,10 +7,12 @@ package server;
 ***************************************************************************/
 
 import java.io.IOException;
+import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import domain.IDomainHandler;
 import domain.AuthEnum;
 import domain.DomainHandler;
@@ -19,8 +21,16 @@ import domain.DomainHandler;
 
 public class SpertaServer{
 
+	public static String menuDeOpcoes = """
+			Comandos disponiveis:
+			- <username> <password>: autentica-se com o servidor (obrigatorio antes de usar outros comandos)
+			- createHouse <houseName>: cria uma nova casa
+			- registerDevice <houseName> <sectionName>: regista um novo dispositivo na secção indicada da casa indicada
+			- addDeviceTime <houseName> <deviceName> <time>: adiciona tempo de uso ao dispositivo indicado da casa indicada
+			""";
+
 	public static void main(String[] args) {
-		System.out.println("servidor: main");
+		System.out.println("Servidor iniciado");
 		SpertaServer server = new SpertaServer();
 		server.startServer();
 	}
@@ -53,7 +63,7 @@ public class SpertaServer{
 		ServerThread(Socket inSoc) {
 			this.socket = inSoc;
 			this.domainHandler = new DomainHandler();
-			System.out.println("thread do server para cada cliente");
+			System.out.println("Novo cliente");
 		}
  
 		public void run(){
@@ -63,6 +73,9 @@ public class SpertaServer{
 					Object request;
 					try {
 						request = inStream.readObject();
+					} catch (EOFException | SocketException e) {
+						// Client closed the terminal (Ctrl+C) or disconnected.
+						break;
 					} catch (ClassNotFoundException e) {
 						outStream.writeObject("ERRO: formato de mensagem invalido");
 						outStream.flush();
@@ -75,23 +88,20 @@ public class SpertaServer{
 						continue;
 					}
 
-					if ("quit".equalsIgnoreCase(msg.trim())) {
-						outStream.writeObject("BYE");
-						outStream.flush();
-						break;
-					}
 					String reply = "Resposta: " + processRequest(msg);
 					outStream.writeObject(reply);
 					outStream.flush();
 				}
 
+			} catch (SocketException e) {
+				System.out.println("Cliente desligou-se.");
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.err.println("Ligacao ao cliente terminada: " + e.getMessage());
 			} finally {
 				try {
 					socket.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					System.err.println("Erro ao fechar socket do cliente: " + e.getMessage());
 				}
 			}
 		}
@@ -111,7 +121,6 @@ public class SpertaServer{
 					}else{
 						return authenticate(arguments[0], arguments[1]);
 					}
-
 				}
 
 
@@ -124,7 +133,16 @@ public class SpertaServer{
 
 				AuthEnum authResult = this.domainHandler.authenticateUser(username, password);
 
-				return authResult == AuthEnum.OK_USER || authResult == AuthEnum.OK_NEW_USER ? "Login bem-sucedido" : "ERRO: credenciais invalidas";
+				if (authResult == AuthEnum.WRONG_PWD) {
+					return "ERRO: WRONG_ PWD: Credenciais invalidas";
+				}
+				if (authResult == AuthEnum.OK_NEW_USER) {
+					return "OK_NEW_USER: Novo utilizador criado e autenticado com sucesso";
+				}
+				if(authResult == AuthEnum.OK_USER) {
+					return "OK_USER: Utilizador autenticado com sucesso";
+				}
+				return "ERRO: resultado de autenticação inesperado";
 			}
 		}
 }
