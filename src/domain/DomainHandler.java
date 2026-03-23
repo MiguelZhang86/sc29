@@ -10,19 +10,25 @@ public class DomainHandler implements IDomainHandler {
     private User authenticatedUser;
     private DataManager dm;
  
-    private DomainHandler() {
+    public DomainHandler() {
         this.authenticatedUser = null;
         this.dm = DataManager.getInstance();
     }
 
-    public boolean authenticateUser(String username, String password) {
-        if(dm.authenticateUser(username, password) == null){
-            return false;
+    public AuthEnum authenticateUser(String username, String password) {
+        AuthResult authentication = dm.authenticateUser(username, password);
+        if(authentication.getAuthEnum() == AuthEnum.WRONG_PWD){
+            return AuthEnum.WRONG_PWD;
+        }
+        else if(authentication.getAuthEnum() == AuthEnum.OK_NEW_USER){
+            this.authenticatedUser = authentication.getUser();
+            return AuthEnum.OK_NEW_USER;
         }
         else{
-            this.authenticatedUser = dm.authenticateUser(username, password);
-            return true;
+            this.authenticatedUser = authentication.getUser();
+            return AuthEnum.OK_USER;
         }
+       
     }
 
     public boolean isUserAllowed(String houseName, String sectionName) {

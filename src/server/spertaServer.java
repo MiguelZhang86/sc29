@@ -11,6 +11,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import domain.IDomainHandler;
+import domain.AuthEnum;
+import domain.DomainHandler;
 
 //Servidor SpertaServer
 
@@ -45,9 +48,11 @@ public class SpertaServer{
 	class ServerThread extends Thread {
 
 		private Socket socket = null;
+		private IDomainHandler domainHandler;
 
 		ServerThread(Socket inSoc) {
-			socket = inSoc;
+			this.socket = inSoc;
+			this.domainHandler = new DomainHandler();
 			System.out.println("thread do server para cada cliente");
 		}
  
@@ -75,7 +80,6 @@ public class SpertaServer{
 						outStream.flush();
 						break;
 					}
-
 					String reply = "Resposta: " + processRequest(msg);
 					outStream.writeObject(reply);
 					outStream.flush();
@@ -91,13 +95,36 @@ public class SpertaServer{
 				}
 			}
 		}
-	}
+	
 
-	private String processRequest(String request) {
-		String[] arguments = request.split(" ");
-		if (arguments.length == 0) {
-			return "ERRO: comando vazio";
-		}
-		return request.toUpperCase()+ "eheheheh ronaldinho soccer";
+			private String processRequest(String request) {
+				String[] arguments = request.split(" ");
+
+				if (arguments.length == 0) {
+					return "ERRO: comando vazio";
+				}
+
+				//autenticação
+				if(!this.domainHandler.isAnyoneAuthenticated()) {
+					if(arguments.length != 2) {
+						return "ERRO: deve autenticar-se primeiro com o comando '<username> <password>'";
+					}else{
+						return authenticate(arguments[0], arguments[1]);
+					}
+
+				}
+
+
+
+
+				return request.toUpperCase()+ "eheheheh ronaldinho soccer";
+				}
+
+			private String authenticate(String username, String password) {
+
+				AuthEnum authResult = this.domainHandler.authenticateUser(username, password);
+
+				return authResult == AuthEnum.OK_USER || authResult == AuthEnum.OK_NEW_USER ? "Login bem-sucedido" : "ERRO: credenciais invalidas";
+			}
 		}
 }

@@ -3,9 +3,11 @@
  */
 package domain;
 
-public class User {
-    private String name;
-    private String pw;
+import java.util.Objects;
+
+public final class User {
+    private final String name;
+    private final String pw;
 
     /**
      * Creates a user with a name.
@@ -14,8 +16,8 @@ public class User {
      * @param pw the user password
      */
     User(String name, String pw) {
-        this.name = name;
-        this.pw = pw;
+        this.name = Objects.requireNonNull(name, "name cannot be null");
+        this.pw = Objects.requireNonNull(pw, "pw cannot be null");
     }
 
     /**
@@ -48,6 +50,11 @@ public class User {
             return this.name.equals(u.name);
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.name.hashCode();
     }
 
     boolean authenticate(String pw) {

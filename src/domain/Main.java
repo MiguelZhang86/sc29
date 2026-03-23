@@ -60,10 +60,10 @@ public class Main {
         dm.addUser(new User("guest1", "pw2"));
 
         DomainHandler handler = createDomainHandlerForTests();
-        boolean authenticated = handler.authenticateUser("owner1", "pw1");
+        AuthEnum authenticated = handler.authenticateUser("owner1", "pw1");
         System.out.println("owner1 autenticado no DomainHandler: " + authenticated);
 
-        if (authenticated) {
+        if (authenticated == AuthEnum.OK_USER || authenticated == AuthEnum.OK_NEW_USER) {
             handler.createHouse("CasaA");
             handler.createHouse("CasaB");
 

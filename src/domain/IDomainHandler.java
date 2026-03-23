@@ -3,7 +3,7 @@ package domain;
 public interface IDomainHandler {
     
     //AUTH <username> <password>
-    boolean authenticateUser(String username, String password);
+    AuthEnum authenticateUser(String username, String password);
     
     //CREATE <hm> - O utilizador é owner
     void createHouse(String name);
@@ -14,7 +14,9 @@ public interface IDomainHandler {
     // EC <hm> <d> <int> # Utilizador logado tenta mudar valor do dispositivo
     void addDeviceTime(String houseName, String deviceName, int value);
 
-    
+    //Bonus
+    boolean isAnyoneAuthenticated();
+
     //EXIT
     void logout();
 

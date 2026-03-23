@@ -80,13 +80,21 @@ public class DataManager {
         return INSTANCE;
     }
 
-    public User authenticateUser(String username, String password) {
+    public AuthResult authenticateUser(String username, String password) {
         for (User user : users) {
-            if (user.getName().equals(username) && user.isPassword(password)) {
-                return user;
+            if (user.getName().equals(username)) {
+                if (user.isPassword(password)) {
+                    return new AuthResult(user, AuthEnum.OK_USER);
+                } else {
+                    return new AuthResult(null, AuthEnum.WRONG_PWD);
+                }
             }
         }
-        return null;
+
+        // If user not found, create a new one
+        User newUser = new User(username, password);
+        users.add(newUser);
+        return new AuthResult(newUser, AuthEnum.OK_NEW_USER);
     }
     
 
