@@ -67,10 +67,7 @@ public class DomainHandler implements IDomainHandler {
     }
 
     public boolean isAnyoneAuthenticated() {
-        if(authenticatedUser == null) {
-            throw new IllegalStateException("No user is currently authenticated");
-        }
-        return authenticatedUser != null;
+        return this.authenticatedUser != null;
     }
     
 

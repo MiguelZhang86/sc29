@@ -1,4 +1,5 @@
-Next commit message: "removi o metodo get User by username"
+Next commit message: "Criei o authResult, Fiz o user imutavel"
+
 
 
 Nomes automaticos (1,2,3)
