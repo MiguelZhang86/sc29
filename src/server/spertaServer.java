@@ -12,13 +12,13 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-//Servidor spertaServer
+//Servidor SpertaServer
 
-public class spertaServer{
+public class SpertaServer{
 
 	public static void main(String[] args) {
 		System.out.println("servidor: main");
-		spertaServer server = new spertaServer();
+		SpertaServer server = new SpertaServer();
 		server.startServer();
 	}
 

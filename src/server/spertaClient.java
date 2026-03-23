@@ -2,16 +2,16 @@ package server;
 
 /***************************************************************************
 *   Seguranca e Confiabilidade 2025/26
-*   Cliente simples para comunicar com spertaServer
-***************************************************************************/
+*   Cliente simples para comunicar com SpertaServer
+ ***************************************************************************/
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.util.Scanner;
+ import java.io.IOException;
+ import java.io.ObjectInputStream;
+ import java.io.ObjectOutputStream;
+ import java.net.Socket;
+ import java.util.Scanner;
 
-public class spertaClient {
+ public class SpertaClient {
 
     private static final String DEFAULT_HOST = "127.0.0.1";
     private static final int DEFAULT_PORT = 23456;
@@ -32,7 +32,7 @@ public class spertaClient {
         }
 
         Scanner sc = new Scanner(System.in);
-        new spertaClient().chat(host, port, sc);
+        new SpertaClient().chat(host, port, sc);
     }
 
     public void chat(String host, int port, Scanner sc) {
