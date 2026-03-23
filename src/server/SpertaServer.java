@@ -37,15 +37,26 @@ public class SpertaServer{
 			enviados ao dispositivo <d> da casa <hm>, desde que o utilizador tenha 
 			permissões.
 			""";
+	public static int defaultPort = 23456;
 
 	public static void main(String[] args) {
-		System.out.println("Servidor iniciado");
+		int port = defaultPort;
+		if (args.length >= 1) {
+			try {
+				port = Integer.parseInt(args[0]);
+			} catch (NumberFormatException e) {
+				System.err.println("Porta invalida, usando valor por defeito: " + defaultPort);
+				port = defaultPort;
+			}
+		}
+		System.out.println("Servidor iniciado na porta " + port);
 		SpertaServer server = new SpertaServer();
-		server.startServer();
+		server.startServer(port);
 	}
 
-	public void startServer (){
-		try (ServerSocket sSoc = new ServerSocket(23456)) {
+	public void startServer (int port){
+		
+		try (ServerSocket sSoc = new ServerSocket(port)) {
 			while(true) {
 				try {
 					Socket inSoc = sSoc.accept();
@@ -188,9 +199,7 @@ public class SpertaServer{
 						if(history.startsWith("ERRO")) {
 							return history;
 						}
-						if(history == null) {
-							return "Nenhum comando registado para o dispositivo '" + arguments[2] + "' da casa '" + arguments[1] + "'";
-						}
+						
 						return "Historico do dispositivo '" + arguments[2] + "' da casa '" + arguments[1] + "':\n" + history;
 					} catch (IllegalStateException e) {
 						return "ERRO: " + e.getMessage();
