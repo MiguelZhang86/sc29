@@ -4,12 +4,12 @@ import java.time.LocalDateTime;
 
 import domain.DomainHandler;
 
-public class History implements IHistory {
+public class History {
 
     private static final String BASE_DIR = "logs/";
 
-    @Override
-    public void registerCommand(String entry) {
+
+    public static void registerCommand(String entry) {
 
         try{
             String[] parts =entry.split(",");
@@ -35,8 +35,8 @@ public class History implements IHistory {
     // RT<hm>Receber a informação sobre o último comando
     // (estados/temporizações) enviado a cada dispositivo da casa <hm>, desde
     // que o utilizador tenha permissões.
-    @Override
-    public String getLastCommand(DomainHandler domainHandler, String houseName) {
+
+    public static String getLastCommand(DomainHandler domainHandler, String houseName) {
         if(!domainHandler.isUserAllowed(houseName, "")) {
             throw new IllegalArgumentException("User is not allowed to access all sections in the house");
         }
@@ -65,8 +65,8 @@ public class History implements IHistory {
         return res.toString();
     }
 
-    @Override
-    public String getHistory(DomainHandler domainHandler, String houseName, String deviceName) {
+
+    public static String getHistory(DomainHandler domainHandler, String houseName, String deviceName) {
         if (!domainHandler.isUserAllowed(houseName, deviceName)) {
             return "User is not allowed to access this section";
         }

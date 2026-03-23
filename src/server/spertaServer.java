@@ -16,6 +16,7 @@ import java.net.SocketException;
 import domain.IDomainHandler;
 import domain.AuthEnum;
 import domain.DomainHandler;
+import history.History;
 
 //Servidor SpertaServer
 
@@ -23,10 +24,18 @@ public class SpertaServer{
 
 	public static String menuDeOpcoes = """
 			Comandos disponiveis:
-			- <username> <password>: autentica-se com o servidor (obrigatorio antes de usar outros comandos)
-			- createHouse <houseName>: cria uma nova casa
-			- registerDevice <houseName> <sectionName>: regista um novo dispositivo na secção indicada da casa indicada
-			- addDeviceTime <houseName> <deviceName> <time>: adiciona tempo de uso ao dispositivo indicado da casa indicada
+			CREATE <hm> # Criar casa <hm> - utilizador é Owner 
+			• ADD <user1> <hm> <s> # Adicionar utilizador <user1> à casa <hm>, seção 
+			<s>.  
+			• RD <hm> <s> # Registar um Dispositivo na casa <hm>, na seção <s> 
+			• EC  <hm>  <d>  <int>  #  Enviar  valor  <int>  de  estado/temporização,  do 
+			dispositivo <d> da casa <hm>, para o servidor.  
+			• RT <hm># Receber a informação sobre o último comando 
+			(estados/temporizações) enviado a cada dispositivo da casa <hm>, desde 
+			que o utilizador tenha permissões. 
+			• RH <hm> <d># Receber o Histórico (ficheiro de log .csv) de comandos 
+			enviados ao dispositivo <d> da casa <hm>, desde que o utilizador tenha 
+			permissões.
 			""";
 
 	public static void main(String[] args) {
@@ -122,11 +131,78 @@ public class SpertaServer{
 						return authenticate(arguments[0], arguments[1]);
 					}
 				}
+				//a partir daqui, o cliente já está autenticado
+
+				//CREATE <hm> - O utilizador é owner
+				if(arguments[0].equals("CREATE") && arguments.length == 2) {
+					try {
+						this.domainHandler.createHouse(arguments[1]);
+						return "Casa '" + arguments[1] + "' criada com sucesso";
+					} catch (IllegalStateException e) {
+						return "ERRO: " + e.getMessage();
+					}
+				}
+
+				//RD <hm> <s> # Registar um Dispositivo na casa <hm>, na seção <s>
+				if(arguments[0].equals("RD") && arguments.length == 3) {
+					try {
+						this.domainHandler.registerDevice(arguments[1], arguments[2]);
+						return "Dispositivo registado com sucesso na casa '" + arguments[1] + "', seção '" + arguments[2] + "'";
+					} catch (IllegalStateException e) {
+						return "ERRO: " + e.getMessage();
+					}
+				}
+
+				// EC <hm> <d> <int> # Utilizador logado tenta mudar valor do dispositivo
+				if(arguments[0].equals("EC") && arguments.length == 4) {
+					try {
+						int value = Integer.parseInt(arguments[3]);
+						this.domainHandler.addDeviceTime(arguments[1], arguments[2], value);
+						return "Valor " + value + " adicionado ao dispositivo '" + arguments[2] + "' da casa '" + arguments[1] + "'";
+					} catch (NumberFormatException e) {
+						return "ERRO: valor para dispositivo deve ser um inteiro";
+					} catch (IllegalStateException e) {
+						return "ERRO: " + e.getMessage();
+					}
+				}
+				// RT<hm>Receber a informação sobre o último comando
+				// (estados/temporizações) enviado a cada dispositivo da casa <hm>, desde
+				// que o utilizador tenha permissões.
+				if(arguments[0].equals("RT") && arguments.length == 2) {
+					try {
+						String lastCommands = History.getLastCommand((DomainHandler) this.domainHandler, arguments[1]);
+						if(lastCommands == null) {
+							return "Nenhum comando registado para a casa '" + arguments[1] + "'";
+						}
+						return lastCommands;
+					} catch (IllegalStateException e) {
+						return "ERRO: " + e.getMessage();
+					}
+				}
+
+				// RH <hm> <d># Receber o Histórico (ficheiro de log .csv) de comandos
+				// enviados ao dispositivo <d> da casa <hm>, desde que o utilizador tenha permissões.
+				if(arguments[0].equals("RH") && arguments.length == 3) {
+					try {
+						String history = History.getHistory((DomainHandler) this.domainHandler, arguments[1], arguments[2]);
+						if(history.startsWith("ERRO")) {
+							return history;
+						}
+						if(history == null) {
+							return "Nenhum comando registado para o dispositivo '" + arguments[2] + "' da casa '" + arguments[1] + "'";
+						}
+						return "Historico do dispositivo '" + arguments[2] + "' da casa '" + arguments[1] + "':\n" + history;
+					} catch (IllegalStateException e) {
+						return "ERRO: " + e.getMessage();
+					}
+				}	
 
 
 
 
-				return request.toUpperCase()+ "eheheheh ronaldinho soccer";
+
+
+				return SpertaServer.menuDeOpcoes; //não haja match com nenhum comando, retorna o menu de opções
 				}
 
 			private String authenticate(String username, String password) {
