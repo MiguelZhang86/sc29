@@ -14,6 +14,9 @@ public interface IDomainHandler {
     // EC <hm> <d> <int> # Utilizador logado tenta mudar valor do dispositivo
     void addDeviceTime(String houseName, String deviceName, int value);
 
+    // ADD <user1> <hm> <s> # Autorizar utilizador <user1> à casa <hm>, seção <s>.
+    boolean allowUser(String userName, String houseName, String sectionName);
+
     //Bonus
     boolean isAnyoneAuthenticated();
 
@@ -23,6 +26,9 @@ public interface IDomainHandler {
 
     //Bonus para o log, diz se o user autenticado tem permissão para aceder a uma seção da casa
     boolean isUserAllowed(String houseName, String sectionName);
+
+
+
 
 
 

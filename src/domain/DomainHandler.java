@@ -1,15 +1,16 @@
 /**
  * @author Jaime Sousa
+ * Esta classe é responsável por lidar com as operações do dominio, chamadas pelos ServerThreads
+ * Cada ServerThread representa um clinete, e tem uma instância de DomainHandler para lidar com as operações desse cliente
+ * O DomainHandler tem uma referência para o DataManager, que é onde estão guardados os dados do sistema
  */
 
 package domain;
 
 public class DomainHandler implements IDomainHandler {
-
-
     private User authenticatedUser;
     private DataManager dm;
- 
+
     public DomainHandler() {
         this.authenticatedUser = null;
         this.dm = DataManager.getInstance();
@@ -17,18 +18,16 @@ public class DomainHandler implements IDomainHandler {
 
     public AuthEnum authenticateUser(String username, String password) {
         AuthResult authentication = dm.authenticateUser(username, password);
-        if(authentication.getAuthEnum() == AuthEnum.WRONG_PWD){
+        if (authentication.getAuthEnum() == AuthEnum.WRONG_PWD) {
             return AuthEnum.WRONG_PWD;
-        }
-        else if(authentication.getAuthEnum() == AuthEnum.OK_NEW_USER){
+        } else if (authentication.getAuthEnum() == AuthEnum.OK_NEW_USER) {
             this.authenticatedUser = authentication.getUser();
             return AuthEnum.OK_NEW_USER;
-        }
-        else{
+        } else {
             this.authenticatedUser = authentication.getUser();
             return AuthEnum.OK_USER;
         }
-       
+
     }
 
     public boolean isUserAllowed(String houseName, String sectionName) {
@@ -50,7 +49,7 @@ public class DomainHandler implements IDomainHandler {
     @Override
     public void registerDevice(String houseName, String sectionName) {
         isAnyoneAuthenticated(); //throws if no user is authenticated
-        dm.registerDevice(houseName, sectionName, this.authenticatedUser); 
+        dm.registerDevice(houseName, sectionName, this.authenticatedUser);
     }
 
     @Override
@@ -58,10 +57,7 @@ public class DomainHandler implements IDomainHandler {
         isAnyoneAuthenticated(); //throws if no user is authenticated
         dm.addDeviceTime(houseName, deviceName, value, this.authenticatedUser);
     }
-
-    
-
-    public boolean isUserAllowedInAllSections(String houseName){
+    public boolean isUserAllowedInAllSections(String houseName) {
         isAnyoneAuthenticated(); //throws if no user is authenticated
         return dm.isUserAllowedInAllSections(houseName, this.authenticatedUser);
     }
@@ -69,12 +65,11 @@ public class DomainHandler implements IDomainHandler {
     public boolean isAnyoneAuthenticated() {
         return this.authenticatedUser != null;
     }
-    
 
-    
-
-
-
-
+    @Override
+    public boolean allowUser(String userName, String houseName, String sectionName) {
+        isAnyoneAuthenticated(); //throws if no user is authenticated
+        return dm.allowUser(this.authenticatedUser, userName, houseName, sectionName);
+    }
 
 }

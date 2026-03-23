@@ -5,13 +5,13 @@ package server;
 *   Cliente simples para comunicar com SpertaServer
  ***************************************************************************/
 
- import java.io.IOException;
- import java.io.ObjectInputStream;
- import java.io.ObjectOutputStream;
- import java.net.Socket;
- import java.util.Scanner;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.Scanner;
 
- public class SpertaClient {
+public class SpertaClient {
 
     private static final String DEFAULT_HOST = "127.0.0.1";
     private static final int DEFAULT_PORT = 23456;
@@ -32,7 +32,7 @@ package server;
                 port = DEFAULT_PORT;
             }
         }
-        if(args.length == 4) {
+        if (args.length == 4) {
             username = args[2];
             password = args[3];
         }
@@ -47,7 +47,7 @@ package server;
              ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream())) {
 
             // Caso especial: se o cliente fornecer username e password como argumentos, tenta autenticar logo no inicio
-            if(username != null && password != null) {
+            if (username != null && password != null) {
                 outStream.writeObject(username + " " + password);
                 outStream.flush();
 
