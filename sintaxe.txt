@@ -1,0 +1,25 @@
+USERS
+  alice:pass1
+  bob:pass2
+  nuno:pass3
+
+  HOUSES
+  HOUSE:Casa1:alice
+  SECTION:Electros:
+  DEVICE:E1
+  DEVICE:E2
+  SECTION:Garden:
+  SECTION:Luzes:bob,nuno
+  DEVICE:L1
+  DEVICE:L2
+  SECTION:Multimedia:
+  SECTION:Portas:
+  SECTION:Stores:
+  HOUSE:Casa2:bob
+  SECTION:Electros:
+  SECTION:Garden:alice
+  DEVICE:G1
+  SECTION:Luzes:
+  SECTION:Multimedia:
+  SECTION:Portas:
+  SECTION:Stores:

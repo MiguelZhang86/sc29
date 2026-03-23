@@ -1,0 +1,45 @@
+USERS
+owner1:pw1
+guest1:pw2
+
+HOUSES
+House: CasaA
+Owner: owner1
+Section: Electros
+Allowed Users: 
+Devices: E1 
+Section: Garden
+Allowed Users: 
+Devices: G1 
+Section: Luzes
+Allowed Users: 
+Devices: 
+Section: Multimedia
+Allowed Users: 
+Devices: 
+Section: Portas
+Allowed Users: 
+Devices: 
+Section: Stores
+Allowed Users: 
+Devices: 
+House: CasaB
+Owner: owner1
+Section: Electros
+Allowed Users: 
+Devices: 
+Section: Garden
+Allowed Users: 
+Devices: 
+Section: Luzes
+Allowed Users: 
+Devices: 
+Section: Multimedia
+Allowed Users: 
+Devices: M1 
+Section: Portas
+Allowed Users: 
+Devices: 
+Section: Stores
+Allowed Users: 
+Devices: 

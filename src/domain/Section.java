@@ -128,4 +128,20 @@ public class Section {
         return false;
     }
 
+    String toText() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Section: ").append(name).append("\n");
+        sb.append("Allowed Users: ");
+        for (User u : allowedUsers) {
+            sb.append(u.getName()).append(" ");
+        }
+        sb.append("\nDevices: ");
+        for (Device d : devices) {
+            sb.append(d.getName()).append(" ");
+        }
+        return sb.toString();
+    }
+
+    
+
 }

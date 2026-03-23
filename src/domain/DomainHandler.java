@@ -15,8 +15,6 @@ public class DomainHandler implements IDomainHandler {
         this.dm = DataManager.getInstance();
     }
 
-
-
     public boolean authenticateUser(String username, String password) {
         if(dm.authenticateUser(username, password) == null){
             return false;

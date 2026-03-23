@@ -54,5 +54,9 @@ public class User {
         return this.pw.equals(pw);
     }
 
+    String toText(){
+        return this.name+ ":" + this.pw;
+    }
+
 
 }

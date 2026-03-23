@@ -2,6 +2,7 @@ package domain;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.io.*;
 
 public class DataManager {
 
@@ -10,7 +11,7 @@ public class DataManager {
     
     private List<House> houses;
     private List<User> users;
-
+ 
     private DataManager() {
         this.houses = new LinkedList<House>();
         this.users = new LinkedList<User>();
@@ -19,8 +20,60 @@ public class DataManager {
     }
 
     private void load(String dataFile) {
-        
-        // Load data from file (not implemented)
+        File f = new File(dataFile);
+        if(!f.exists()) return;
+
+        try(BufferedReader br = new BufferedReader(new FileReader(f))){
+            String line;
+            String mode = null;
+            House currentHouse = null;
+            Section currentSection = null;
+
+            while((line = br.readLine()) != null){
+                line = line.trim();
+                if(line.isEmpty()) continue;
+
+                if(line.equals("USERS")){mode = "USERS"; continue;}
+                if(line.equals("HOUSES")){mode ="HOUSES"; continue;}
+
+                if("USERS".equals(mode)){
+                    String[] parts = line.split(":");
+                    this.users.add(new User(parts[0], parts[1]));
+
+                } else if("HOUSES".equals(mode)){
+                    if(line.startsWith("HOUSE:")){
+                        String[] parts = line.split(":");
+                        User owner = null;
+                        for(User u: this.users){
+                            if(u.getName().equals(parts[2])){owner=u; break;}
+                        }
+                        currentHouse = new House(parts[1], owner);
+                        houses.add(currentHouse);
+
+                    } else if(line.startsWith("SECTION:")){
+                        String[] parts = line.split(":", -1);
+                        for(Section s: currentHouse.getSections()){
+                            if(s.getName().equals(parts[1])){currentSection = s; break;}
+                        }
+                        if(!parts[2].isEmpty()){
+                            for(String username : parts[2].split(",")){
+                                for(User u : this.users){
+                                    if(u.getName().equals(username.trim())){
+                                        currentSection.addAllowedUser(u);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                    } else if(line.equals("DEVICE")){
+                        currentSection.registerDevice("");
+                    }
+                }
+            }
+        } catch(IOException e){
+            e.printStackTrace();
+        }
     }
     
     public static DataManager getInstance() {
@@ -117,5 +170,23 @@ public class DataManager {
         throw new IllegalArgumentException("House not found: " + houseName);
     }
 
+    public void save(){
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(DATA_FILE))){
+            bw.write("USERS");
+            bw.newLine();
+            for(User u: this.users){
+                bw.write(u.toText());
+                bw.newLine();
+            }
+            bw.newLine();
+            bw.write("HOUSES");
+            bw.newLine();
+            for(House h : this.houses){
+                bw.write(h.toText());
+            }
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+    }
     
 }
