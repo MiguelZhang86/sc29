@@ -162,13 +162,13 @@ public class House {
 	
 	String toText() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("House: ").append(name).append("\n");
-		sb.append("Owner: ").append(owner.getName()).append("\n");
+		sb.append("HOUSE:").append(name).append(":").append(owner.getName()).append("\n");
 		for (Section s : sections) {
-			sb.append(s.toText()).append("\n");
+			sb.append(s.toText());
 		}
 		return sb.toString();
 	}
+
 
 }
 

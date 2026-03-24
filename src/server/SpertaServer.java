@@ -228,7 +228,7 @@ public class SpertaServer {
                 try {
                     int value = Integer.parseInt(arguments[3]);
                     this.domainHandler.addDeviceTime(arguments[1], arguments[2], value);
-                    return "Valor " + value + " adicionado ao dispositivo '" + arguments[2] + "' da casa '" + arguments[1] + "'";
+                    return "Dispositivo '" + arguments[2] + "' da casa '" + arguments[1] + " ligado por mais " + value + " minutos";
                 } catch (NumberFormatException e) {
                     return "ERRO: valor para dispositivo deve ser um inteiro";
                 } catch (IllegalArgumentException e) {

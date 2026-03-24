@@ -1,7 +1,7 @@
 Next commit message: "Migração do github, Fiz o user imutavel, implementei autenticação na cli e 
-liguei o dh ao server, espero pelas funcoes de load da teresa"
+liguei o dh ao server, espero pelas funcoes de load da teresa, arranjei comando EC"
 
-
+TODO: bug fix EC allow
 
 Nomes automaticos (1,2,3)
 Nova casa vem automaticamente com secções dadas no enunciado

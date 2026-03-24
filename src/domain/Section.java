@@ -130,14 +130,14 @@ public class Section {
 
     String toText() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Section: ").append(name).append("\n");
-        sb.append("Allowed Users: ");
-        for (User u : allowedUsers) {
-            sb.append(u.getName()).append(" ");
+        sb.append("SECTION:").append(name).append(":");
+        for (int i = 0; i < allowedUsers.size(); i++) {
+            if(i>0) sb.append(",");
+            sb.append(allowedUsers.get(i).getName());
         }
-        sb.append("\nDevices: ");
+        sb.append("\n");
         for (Device d : devices) {
-            sb.append(d.getName()).append(" ");
+            sb.append("DEVICE:").append(d.getName()).append("\n");
         }
         return sb.toString();
     }
