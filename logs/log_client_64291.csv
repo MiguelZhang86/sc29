@@ -1,0 +1,38 @@
+2026-03-24T16:35:38.577422,
+Messagem enviada: nome pw 
+Resposta: OK_USER: Utilizador autenticado com sucesso
+
+2026-03-24T16:35:43.289089,
+Messagem enviada: CREATE home  
+Resposta: Casa 'home' criada com sucesso
+
+2026-03-24T16:35:50.819017,
+Messagem enviada: RD home Electros  
+Resposta: Dispositivo registado com sucesso na casa 'home', seção 'Electros'
+
+2026-03-24T16:36:01.439882,
+Messagem enviada: EC home E1 20 
+Resposta: Dispositivo 'E1' da casa 'home ligado por mais 20 minutos
+
+2026-03-24T16:36:10.576437,
+Messagem enviada: RD home Garden  
+Resposta: Dispositivo registado com sucesso na casa 'home', seção 'Garden'
+
+2026-03-24T16:36:19.207922,
+Messagem enviada: EC home G1 10 
+Resposta: Dispositivo 'G1' da casa 'home ligado por mais 10 minutos
+
+2026-03-24T16:36:28.380911,
+Messagem enviada: RH home E1 
+Resposta: Historico do dispositivo 'E1' da casa 'home':
+2026-03-24T16:34:25.908009,20
+2026-03-24T16:36:01.438471,20
+
+
+2026-03-24T16:36:46.240669,
+Messagem enviada: RH home G1 
+Resposta: Historico do dispositivo 'G1' da casa 'home':
+2026-03-24T16:34:46.336835,78
+2026-03-24T16:36:19.206684,10
+
+

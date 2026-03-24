@@ -61,15 +61,16 @@ public class House {
 	 * @param user the user to allow
 	 * @param sectionName the name of the section to which to allow the user access
 	 */
-	void allowUser(User owner, User user, String  sectionName) {
+	boolean allowUser(User owner, User user, String  sectionName) {
 		if (isOwner(owner)) {
 			for (Section s : sections) {
 				if (s.getName().equals(sectionName)) {
 					s.addAllowedUser(user);
-					break;
+					return true;
 				}
 			}
 		}
+		return false;
 	}
 	/**
 	 * Disallows a user from accessing the devices of specific section of the house.
@@ -92,6 +93,24 @@ public class House {
 	boolean isUserAllowed(User user, String deviceName) {
 		for (Section s : sections) {
 			if (s.hasDevice(deviceName) && (s.isUserAllowed(user) || isOwner(user))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	boolean isUserAllowedInSection(User user, String sectionName) {
+		for (Section s : sections) {
+			if (s.getName().equals(sectionName)) {
+				return s.isUserAllowed(user) || isOwner(user);
+			}
+		}
+		return false;
+	}
+
+	boolean hasSection(String sectionName) {
+		for (Section s : sections) {
+			if (s.getName().equals(sectionName)) {
 				return true;
 			}
 		}

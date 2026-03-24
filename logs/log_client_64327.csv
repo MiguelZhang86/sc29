@@ -1,0 +1,12 @@
+2026-03-24T16:47:15.765959,
+Messagem enviada: nome pw 
+Resposta: OK_NEW_USER: Novo utilizador criado e autenticado com sucesso
+
+2026-03-24T16:47:24.137111,
+Messagem enviada: CREATE testHouse 
+Resposta: Casa 'testHouse' criada com sucesso
+
+2026-03-24T16:47:33.789839,
+Messagem enviada: RD testHouse Electros 
+Resposta: Dispositivo registado com sucesso na casa 'testHouse', seção 'Electros'
+

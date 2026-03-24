@@ -1,0 +1,34 @@
+2026-03-24T16:20:06.978620,
+Messagem enviada: nome2 pw 
+Resposta: OK_NEW_USER: Novo utilizador criado e autenticado com sucesso
+
+2026-03-24T16:21:36.968997,
+Messagem enviada:  
+Resposta: Comandos disponiveis:
+CREATE <hm>
+# Criar casa <hm> - utilizador é Owner
+ADD <user1> <hm> <s>
+# Autorizar utilizador <user1> à casa <hm>, seção <s>.
+RD <hm> <s>
+# Registar um Dispositivo na casa <hm>, na seção <s>
+EC  <hm>  <d>  <int>
+#  Enviar  valor  <int>  de  estado/temporização,  do
+dispositivo <d> da casa <hm>, para o servidor.
+RT <hm>
+# Receber a informação sobre o último comando
+(estados/temporizações) enviado a cada dispositivo da casa <hm>, desde
+que o utilizador tenha permissões.
+RH <hm> <d>
+# Receber o Histórico (ficheiro de log .csv) de comandos
+enviados ao dispositivo <d> da casa <hm>, desde que o utilizador tenha
+permissões.
+
+
+2026-03-24T16:21:46.280167,
+Messagem enviada: RD home Electros 
+Resposta: ERRO: User is not allowed to access this section
+
+2026-03-24T16:22:00.235629,
+Messagem enviada: RD home E 
+Resposta: ERRO: User is not allowed to access this section
+

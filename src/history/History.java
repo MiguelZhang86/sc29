@@ -34,11 +34,6 @@ public class History {
     // que o utilizador tenha permissões.
 
     public static String getLastCommand(DomainHandler domainHandler, String houseName) {
-
-
-        if(!domainHandler.isUserAllowed(houseName, "")) {
-            throw new IllegalArgumentException("User is not allowed to access all sections in the house");
-        }
         
         File houseDir = new File(BASE_DIR + houseName);
         if(!houseDir.exists())return null;

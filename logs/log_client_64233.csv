@@ -1,0 +1,104 @@
+2026-03-24T16:19:33.000261,
+Messagem enviada: nome pw 
+Resposta: OK_NEW_USER: Novo utilizador criado e autenticado com sucesso
+
+2026-03-24T16:19:35.894184,
+Messagem enviada: CREATE home  
+Resposta: Casa 'home' criada com sucesso
+
+2026-03-24T16:20:17.060699,
+Messagem enviada:  
+Resposta: Comandos disponiveis:
+CREATE <hm>
+# Criar casa <hm> - utilizador é Owner
+ADD <user1> <hm> <s>
+# Autorizar utilizador <user1> à casa <hm>, seção <s>.
+RD <hm> <s>
+# Registar um Dispositivo na casa <hm>, na seção <s>
+EC  <hm>  <d>  <int>
+#  Enviar  valor  <int>  de  estado/temporização,  do
+dispositivo <d> da casa <hm>, para o servidor.
+RT <hm>
+# Receber a informação sobre o último comando
+(estados/temporizações) enviado a cada dispositivo da casa <hm>, desde
+que o utilizador tenha permissões.
+RH <hm> <d>
+# Receber o Histórico (ficheiro de log .csv) de comandos
+enviados ao dispositivo <d> da casa <hm>, desde que o utilizador tenha
+permissões.
+
+
+2026-03-24T16:20:41.791883,
+Messagem enviada: RD home Electros  
+Resposta: Dispositivo registado com sucesso na casa 'home', seção 'Electros'
+
+2026-03-24T16:20:55.990240,
+Messagem enviada: ADD nome2 Electros 
+Resposta: Comandos disponiveis:
+CREATE <hm>
+# Criar casa <hm> - utilizador é Owner
+ADD <user1> <hm> <s>
+# Autorizar utilizador <user1> à casa <hm>, seção <s>.
+RD <hm> <s>
+# Registar um Dispositivo na casa <hm>, na seção <s>
+EC  <hm>  <d>  <int>
+#  Enviar  valor  <int>  de  estado/temporização,  do
+dispositivo <d> da casa <hm>, para o servidor.
+RT <hm>
+# Receber a informação sobre o último comando
+(estados/temporizações) enviado a cada dispositivo da casa <hm>, desde
+que o utilizador tenha permissões.
+RH <hm> <d>
+# Receber o Histórico (ficheiro de log .csv) de comandos
+enviados ao dispositivo <d> da casa <hm>, desde que o utilizador tenha
+permissões.
+
+
+2026-03-24T16:21:01.268707,
+Messagem enviada: Add nome2 E 
+Resposta: Comandos disponiveis:
+CREATE <hm>
+# Criar casa <hm> - utilizador é Owner
+ADD <user1> <hm> <s>
+# Autorizar utilizador <user1> à casa <hm>, seção <s>.
+RD <hm> <s>
+# Registar um Dispositivo na casa <hm>, na seção <s>
+EC  <hm>  <d>  <int>
+#  Enviar  valor  <int>  de  estado/temporização,  do
+dispositivo <d> da casa <hm>, para o servidor.
+RT <hm>
+# Receber a informação sobre o último comando
+(estados/temporizações) enviado a cada dispositivo da casa <hm>, desde
+que o utilizador tenha permissões.
+RH <hm> <d>
+# Receber o Histórico (ficheiro de log .csv) de comandos
+enviados ao dispositivo <d> da casa <hm>, desde que o utilizador tenha
+permissões.
+
+
+2026-03-24T16:21:20.659982,
+Messagem enviada: Add nome2 home Electros 
+Resposta: Comandos disponiveis:
+CREATE <hm>
+# Criar casa <hm> - utilizador é Owner
+ADD <user1> <hm> <s>
+# Autorizar utilizador <user1> à casa <hm>, seção <s>.
+RD <hm> <s>
+# Registar um Dispositivo na casa <hm>, na seção <s>
+EC  <hm>  <d>  <int>
+#  Enviar  valor  <int>  de  estado/temporização,  do
+dispositivo <d> da casa <hm>, para o servidor.
+RT <hm>
+# Receber a informação sobre o último comando
+(estados/temporizações) enviado a cada dispositivo da casa <hm>, desde
+que o utilizador tenha permissões.
+RH <hm> <d>
+# Receber o Histórico (ficheiro de log .csv) de comandos
+enviados ao dispositivo <d> da casa <hm>, desde que o utilizador tenha
+permissões.
+
+
+2026-03-24T16:21:30.297047,
+Messagem enviada: ADD nome2 home E 
+Resposta: Utilizador 'nome2' adicionado à casa 'home', seção 'E'
+

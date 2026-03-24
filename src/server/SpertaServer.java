@@ -228,6 +228,7 @@ public class SpertaServer {
                 try {
                     int value = Integer.parseInt(arguments[3]);
                     this.domainHandler.addDeviceTime(arguments[1], arguments[2], value);
+                    History.registerCommand(arguments[1] + "," + arguments[2] + "," + arguments[3]);
                     return "Dispositivo '" + arguments[2] + "' da casa '" + arguments[1] + " ligado por mais " + value + " minutos";
                 } catch (NumberFormatException e) {
                     return "ERRO: valor para dispositivo deve ser um inteiro";
@@ -268,7 +269,10 @@ public class SpertaServer {
             if (arguments[0].equals("RH") && arguments.length == 3) {
                 try {
                     String history = History.getHistory((DomainHandler) this.domainHandler, arguments[1], arguments[2]);
-                    if (history.startsWith("ERRO")) {
+                    if (history==null) {
+                        return "NODATA";
+                    }
+                    if(history.equals("NOPERM")){
                         return history;
                     }
 

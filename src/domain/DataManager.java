@@ -78,7 +78,7 @@ public class DataManager {
                             }
                         }
 
-                    } else if (line.equals("DEVICE")) {
+                    } else if (line.startsWith("DEVICE:")) {
                         currentSection.registerDevice("");
                     }
                 }
@@ -122,11 +122,17 @@ public class DataManager {
 
     public boolean isUserAllowed(String houseName, String sectionName, User user) {
         House house = getHouse(houseName);
-        if (house == null) {
-            return false;
+        if (sectionName == null || sectionName.isEmpty()) {
+            return house.isUserAllowedInAllSections(user);
         }
 
-        return house.isOwner(user) || house.isUserAllowed(user, sectionName);
+        // If the target matches a section, validate section permission.
+        if (house.hasSection(sectionName)) {
+            return house.isUserAllowedInSection(user, sectionName);
+        }
+
+        // Otherwise treat target as a device and validate against that device's section.
+        return house.isUserAllowed(user, sectionName);
     }
 
     private House getHouse(String houseName) {
@@ -203,9 +209,6 @@ public class DataManager {
 
     public boolean allowUser(User authenticatedUser, String userName, String houseName, String sectionName) {
         House house = getHouse(houseName);
-        if (house == null) {
-            throw new IllegalArgumentException("House not found: " + houseName);
-        }
         if (!house.isOwner(authenticatedUser)) {
             throw new IllegalArgumentException("Only the owner can allow users");
         }
@@ -219,7 +222,9 @@ public class DataManager {
         if (userToAllow == null) {
             throw new IllegalArgumentException("User to allow not found: " + userName);
         }
-        house.allowUser(authenticatedUser, userToAllow, sectionName);
+        if (!house.allowUser(authenticatedUser, userToAllow, sectionName)) {
+            throw new IllegalArgumentException("Section not found: " + sectionName);
+        }
         return true;
     }
     

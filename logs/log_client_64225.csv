@@ -1,0 +1,31 @@
+2026-03-24T16:16:22.354524,
+Messagem enviada: nome pw 
+Resposta: OK_NEW_USER: Novo utilizador criado e autenticado com sucesso
+
+2026-03-24T16:16:25.760888,
+Messagem enviada: CREATE house 
+Resposta: Casa 'house' criada com sucesso
+
+2026-03-24T16:16:35.867891,
+Messagem enviada: RD home Electros  
+Resposta: ERRO: House not found: home
+
+2026-03-24T16:16:44.243128,
+Messagem enviada: RD house Electros 
+Resposta: Dispositivo registado com sucesso na casa 'house', seção 'Electros'
+
+2026-03-24T16:16:54.820819,
+Messagem enviada: EC house E1 20 
+Resposta: Dispositivo 'E1' da casa 'house ligado por mais 20 minutos
+
+2026-03-24T16:17:02.643447,
+Messagem enviada: RH house E1 
+Resposta: Historico do dispositivo 'E1' da casa 'house':
+2026-03-24T16:16:54.814530,20
+
+
+2026-03-24T16:19:01.232736,
+Messagem enviada: RT house 
+Resposta: E1.csv: 2026-03-24T16:16:54.814530,20
+
+
