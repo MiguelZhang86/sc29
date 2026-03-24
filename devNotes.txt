@@ -1,5 +1,4 @@
-Next commit message: "Migração do github, Fiz o user imutavel, implementei autenticação na cli e 
-liguei o dh ao server, espero pelas funcoes de load da teresa, arranjei comando EC"
+Next commit message: "Merged Teresa's patch in history and toText() method in House and Section" 
 
 TODO: bug fix EC allow
 

@@ -34,6 +34,8 @@ Isto compila todo o codigo para a pasta `bin`.
 
 ## Execucao (Windows e Linux)
 
+FAZER TODOS OS COMANDOS NO DIRETORIO BASE (sc29/)
+
 ### 1) Teste de dominio
 
 ```powershell
