@@ -1,0 +1,42 @@
+2026-03-24T14:04:01.324244600,
+Messagem enviada: Antunes 1234 
+Resposta: OK_NEW_USER: Novo utilizador criado e autenticado com sucesso
+
+2026-03-24T14:04:44.998283,
+Messagem enviada: CREATE saladonoc 
+Resposta: Casa 'saladonoc' criada com sucesso
+
+2026-03-24T14:04:55.009922300,
+Messagem enviada: RD saladonoc Electros 
+Resposta: Dispositivo registado com sucesso na casa 'saladonoc', seção 'Electros'
+
+2026-03-24T14:05:01.021513600,
+Messagem enviada: EC E1 2 
+Resposta: Comandos disponiveis:
+CREATE <hm>
+# Criar casa <hm> - utilizador é Owner
+ADD <user1> <hm> <s>
+# Autorizar utilizador <user1> à casa <hm>, seção <s>.
+RD <hm> <s>
+# Registar um Dispositivo na casa <hm>, na seção <s>
+EC  <hm>  <d>  <int>
+#  Enviar  valor  <int>  de  estado/temporização,  do
+dispositivo <d> da casa <hm>, para o servidor.
+RT <hm>
+# Receber a informação sobre o último comando
+(estados/temporizações) enviado a cada dispositivo da casa <hm>, desde
+que o utilizador tenha permissões.
+RH <hm> <d>
+# Receber o Histórico (ficheiro de log .csv) de comandos
+enviados ao dispositivo <d> da casa <hm>, desde que o utilizador tenha
+permissões.
+
+
+2026-03-24T14:05:16.238976700,
+Messagem enviada: EC saladonoc E1 2 
+Resposta: Valor 2 adicionado ao dispositivo 'E1' da casa 'saladonoc'
+
+2026-03-24T14:05:20.837302300,
+Messagem enviada: EC saladonoc E1 4 
+Resposta: Valor 4 adicionado ao dispositivo 'E1' da casa 'saladonoc'
+

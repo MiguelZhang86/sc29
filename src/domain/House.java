@@ -30,6 +30,10 @@ public class House {
 		this.sections.add(new Section("Multimedia"));
 		this.sections.add(new Section("Portas"));
 		this.sections.add(new Section("Stores"));
+
+		for (Section s : sections) {
+			s.addAllowedUser(owner);
+		}
 	}
 
 	/**
@@ -124,6 +128,7 @@ public class House {
 	 */
 	void addSection(Section section) {
 		sections.add(section);
+		section.addAllowedUser(owner);
 	}
 
 	/**
@@ -133,6 +138,9 @@ public class House {
 	 */
 	void addSections(List<Section> sections) {
 		this.sections.addAll(sections);
+		for (Section s : sections) {
+			s.addAllowedUser(owner);
+		}
 	}
 
 	List<Section> getSections() {

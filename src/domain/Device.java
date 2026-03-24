@@ -22,8 +22,8 @@ public class Device{
     * @param time the time to turn on the device
     */
     void turnOn(int time) {
-        if (time > 0) {
-            throw new IllegalArgumentException("Equipment already in use for " + time + " minutes.");
+        if (time <= 0) {
+            throw new IllegalArgumentException("Device value/time must be greater than 0.");
         }
         this.upTime += time;
     }

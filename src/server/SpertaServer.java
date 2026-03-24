@@ -161,7 +161,13 @@ public class SpertaServer {
                         continue;
                     }
 
-                    String reply = "Resposta: " + processRequest(msg);
+                    String reply;
+                    try {
+                        reply = "Resposta: " + processRequest(msg);
+                    } catch (RuntimeException e) {
+                        String errorMessage = e.getMessage() == null ? "erro interno" : e.getMessage();
+                        reply = "Resposta: ERRO: " + errorMessage;
+                    }
                     clientLog.write("\nMessagem enviada: " + msg + " \n" + reply + "\n");
                     outStream.writeObject(reply);
                     outStream.flush();
@@ -202,7 +208,7 @@ public class SpertaServer {
                 try {
                     this.domainHandler.createHouse(arguments[1]);
                     return "Casa '" + arguments[1] + "' criada com sucesso";
-                } catch (IllegalStateException e) {
+                } catch (IllegalArgumentException e) {
                     return "ERRO: " + e.getMessage();
                 }
             }
@@ -212,7 +218,7 @@ public class SpertaServer {
                 try {
                     this.domainHandler.registerDevice(arguments[1], arguments[2]);
                     return "Dispositivo registado com sucesso na casa '" + arguments[1] + "', seção '" + arguments[2] + "'";
-                } catch (IllegalStateException e) {
+                } catch (IllegalArgumentException e) {
                     return "ERRO: " + e.getMessage();
                 }
             }
@@ -225,9 +231,9 @@ public class SpertaServer {
                     return "Valor " + value + " adicionado ao dispositivo '" + arguments[2] + "' da casa '" + arguments[1] + "'";
                 } catch (NumberFormatException e) {
                     return "ERRO: valor para dispositivo deve ser um inteiro";
-                } catch (IllegalStateException e) {
+                } catch (IllegalArgumentException e) {
                     return "ERRO: " + e.getMessage();
-                }
+                } 
             }
 
 				//ADD <user1> <hm> <s> # Autorizar utilizador <user1> à casa <hm>, seção <s>.
@@ -236,10 +242,8 @@ public class SpertaServer {
                     //TODO
 
                     return "Utilizador '" + arguments[1] + "' adicionado à casa '" + arguments[2] + "', seção '" + arguments[3] + "'";
-                } catch (IllegalStateException e) {
+                } catch (IllegalArgumentException e) {
                     return "ERRO: " + e.getMessage();
-                } catch (NumberFormatException e) {
-                    return "ERRO: valor de tempo/estado deve ser um inteiro";
                 }
             }
 
@@ -254,7 +258,7 @@ public class SpertaServer {
                         return "Nenhum comando registado para a casa '" + arguments[1] + "'";
                     }
                     return lastCommands;
-                } catch (IllegalStateException e) {
+                } catch (IllegalArgumentException e) {
                     return "ERRO: " + e.getMessage();
                 }
             }
@@ -269,7 +273,7 @@ public class SpertaServer {
                     }
 
                     return "Historico do dispositivo '" + arguments[2] + "' da casa '" + arguments[1] + "':\n" + history;
-                } catch (IllegalStateException e) {
+                } catch (IllegalArgumentException e) {
                     return "ERRO: " + e.getMessage();
                 }
             }
