@@ -93,3 +93,40 @@ javac -d bin src/domain/*.java src/history/*.java src/server/*.java
 
 No diretorio base sc29 abrir powershell e executar:
 $code = Get-Content -Raw .\test_smoke.ps1; Invoke-Expression $code
+
+## JARs (cliente e servidor)
+
+Para gerar os dois ficheiros JAR:
+
+### Windows (PowerShell)
+
+Se a politica permitir scripts:
+
+```powershell
+.\build_jars.ps1
+```
+
+Se estiver com politica `AllSigned`:
+
+```powershell
+$code = Get-Content -Raw .\build_jars.ps1; Invoke-Expression $code
+```
+
+Isto cria:
+
+- `dist/sperta-client.jar`
+- `dist/sperta-server.jar`
+
+### Executar os JARs
+
+Servidor:
+
+```powershell
+java -jar dist/sperta-server.jar 23456
+```
+
+Cliente (noutro terminal):
+
+```powershell
+java -jar dist/sperta-client.jar 127.0.0.1 23456
+```

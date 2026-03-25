@@ -44,3 +44,7 @@
 2026-03-25T15:23:54.487157700,Novo cliente: 127.0.0.1:51351
 2026-03-25T15:23:55.504893700,Novo cliente: 127.0.0.1:51352
 2026-03-25T15:23:56.604416,Novo cliente: 127.0.0.1:51353
+2026-03-25T16:06:25.124022500,Servidor iniciado na porta 23457
+2026-03-25T16:06:47.330169200,Servidor iniciado na porta 23457
+2026-03-25T16:06:47.368170500,Falha ao abrir socket do servidor: Address already in use: bind
+2026-03-25T16:06:57.816133700,Servidor iniciado na porta 34567
