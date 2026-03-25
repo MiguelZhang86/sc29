@@ -240,8 +240,7 @@ public class SpertaServer {
 				//ADD <user1> <hm> <s> # Autorizar utilizador <user1> à casa <hm>, seção <s>.
             if (arguments[0].equals("ADD") && arguments.length == 4) {
                 try {
-                    //TODO
-
+                    this.domainHandler.allowUser(arguments[1], arguments[2], arguments[3]);
                     return "Utilizador '" + arguments[1] + "' adicionado à casa '" + arguments[2] + "', seção '" + arguments[3] + "'";
                 } catch (IllegalArgumentException e) {
                     return "ERRO: " + e.getMessage();

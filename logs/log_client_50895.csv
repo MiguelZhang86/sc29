@@ -1,0 +1,16 @@
+2026-03-25T14:39:30.448287300,
+Messagem enviada: Antunes 1234 
+Resposta: OK_NEW_USER: Novo utilizador criado e autenticado com sucesso
+
+2026-03-25T14:39:39.688104500,
+Messagem enviada: CREATE barraca 
+Resposta: Casa 'barraca' criada com sucesso
+
+2026-03-25T14:39:56.473967100,
+Messagem enviada: ADD Xavier barraca Electros 
+Resposta: ERRO: User to allow not found: Xavier
+
+2026-03-25T14:40:23.737899100,
+Messagem enviada: ADD Xavier barraca Electros 
+Resposta: Utilizador 'Xavier' adicionado à casa 'barraca', seção 'Electros'
+

@@ -208,10 +208,25 @@ public class DataManager {
     }
 
     public boolean allowUser(User authenticatedUser, String userName, String houseName, String sectionName) {
+        if (authenticatedUser == null) {
+            throw new IllegalArgumentException("Authenticated user is required");
+        }
+        if (userName == null || userName.trim().isEmpty()) {
+            throw new IllegalArgumentException("User name is required");
+        }
+        if (houseName == null || houseName.trim().isEmpty()) {
+            throw new IllegalArgumentException("House name is required");
+        }
+        if (sectionName == null || sectionName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Section name is required");
+        }
+
         House house = getHouse(houseName);
+
         if (!house.isOwner(authenticatedUser)) {
             throw new IllegalArgumentException("Only the owner can allow users");
         }
+
         User userToAllow = null;
         for (User u : this.users) {
             if (u.getName().equals(userName)) {

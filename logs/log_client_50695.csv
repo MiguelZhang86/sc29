@@ -1,0 +1,46 @@
+2026-03-25T14:16:02.983947200,
+Messagem enviada: Antunes 2345 
+Resposta: OK_NEW_USER: Novo utilizador criado e autenticado com sucesso
+
+2026-03-25T14:20:22.910088300,
+Messagem enviada: RD casaqnaoexiste Electros 
+Resposta: ERRO: House not found: casaqnaoexiste
+
+2026-03-25T14:20:38.083776900,
+Messagem enviada: EC casaqnaoexiste E1 4 
+Resposta: ERRO: House or Device not found: casaqnaoexiste
+
+2026-03-25T14:21:06.618014800,
+Messagem enviada: CREATE barraca 
+Resposta: Casa 'barraca' criada com sucesso
+
+2026-03-25T14:21:52.624454400,
+Messagem enviada: ADD Xavier Barraca 
+Resposta: Comandos disponiveis:
+CREATE <hm>
+# Criar casa <hm> - utilizador é Owner
+ADD <user1> <hm> <s>
+# Autorizar utilizador <user1> à casa <hm>, seção <s>.
+RD <hm> <s>
+# Registar um Dispositivo na casa <hm>, na seção <s>
+EC  <hm>  <d>  <int>
+#  Enviar  valor  <int>  de  estado/temporização,  do
+dispositivo <d> da casa <hm>, para o servidor.
+RT <hm>
+# Receber a informação sobre o último comando
+(estados/temporizações) enviado a cada dispositivo da casa <hm>, desde
+que o utilizador tenha permissões.
+RH <hm> <d>
+# Receber o Histórico (ficheiro de log .csv) de comandos
+enviados ao dispositivo <d> da casa <hm>, desde que o utilizador tenha
+permissões.
+
+
+2026-03-25T14:22:05.690930400,
+Messagem enviada: ADD Xavier Barraca Electros 
+Resposta: Utilizador 'Xavier' adicionado à casa 'Barraca', seção 'Electros'
+
+2026-03-25T14:23:37.297399600,
+Messagem enviada: ADD userqnexiste barraca Electros 
+Resposta: Utilizador 'userqnexiste' adicionado à casa 'barraca', seção 'Electros'
+
