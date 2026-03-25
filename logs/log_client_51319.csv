@@ -1,0 +1,12 @@
+2026-03-25T15:20:14.560914300,
+Messagem enviada: user_152012 1111 
+Resposta: OK_USER: Utilizador autenticado com sucesso
+
+2026-03-25T15:20:14.569403300,
+Messagem enviada: RD casa_152012 Electros 
+Resposta: Dispositivo registado com sucesso na casa 'casa_152012', seção 'Electros'
+
+2026-03-25T15:20:14.572734,
+Messagem enviada: ADD owner_152012 casa_152012 Electros 
+Resposta: ERRO: Only the owner can allow users
+

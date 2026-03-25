@@ -88,3 +88,8 @@ javac -d bin src\domain\*.java src\history\*.java src\server\*.java
 find bin -type f -name "*.class" -delete
 javac -d bin src/domain/*.java src/history/*.java src/server/*.java
 ```
+
+### Teste PS
+
+No diretorio base sc29 abrir powershell e executar:
+$code = Get-Content -Raw .\test_smoke.ps1; Invoke-Expression $code

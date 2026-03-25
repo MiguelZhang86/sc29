@@ -1,0 +1,8 @@
+2026-03-25T15:03:13.402786700,
+Messagem enviada: Antunes 1234 
+Resposta: OK_NEW_USER: Novo utilizador criado e autenticado com sucesso
+
+2026-03-25T15:03:18.643017500,
+Messagem enviada: CREATE casa1 
+Resposta: ERRO: House already exists: casa1
+

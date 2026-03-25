@@ -1,0 +1,26 @@
+2026-03-25T15:19:42.770807700,
+Messagem enviada: user_151942 1111 
+Resposta: OK_NEW_USER: Novo utilizador criado e autenticado com sucesso
+
+2026-03-25T15:19:42.789809100,
+Messagem enviada:  
+Resposta: Comandos disponiveis:
+CREATE <hm>
+# Criar casa <hm> - utilizador é Owner
+ADD <user1> <hm> <s>
+# Autorizar utilizador <user1> à casa <hm>, seção <s>.
+RD <hm> <s>
+# Registar um Dispositivo na casa <hm>, na seção <s>
+EC  <hm>  <d>  <int>
+#  Enviar  valor  <int>  de  estado/temporização,  do
+dispositivo <d> da casa <hm>, para o servidor.
+RT <hm>
+# Receber a informação sobre o último comando
+(estados/temporizações) enviado a cada dispositivo da casa <hm>, desde
+que o utilizador tenha permissões.
+RH <hm> <d>
+# Receber o Histórico (ficheiro de log .csv) de comandos
+enviados ao dispositivo <d> da casa <hm>, desde que o utilizador tenha
+permissões.
+
+

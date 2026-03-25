@@ -1,0 +1,32 @@
+2026-03-25T14:48:28.921862200,
+Messagem enviada: owner1 1234 
+Resposta: OK_NEW_USER: Novo utilizador criado e autenticado com sucesso
+
+2026-03-25T14:48:52.532123300,
+Messagem enviada: CREATE casa1 
+Resposta: Casa 'casa1' criada com sucesso
+
+2026-03-25T14:49:06.219031600,
+Messagem enviada: ADD user1 casa1 Electros 
+Resposta: Utilizador 'user1' adicionado à casa 'casa1', seção 'Electros'
+
+2026-03-25T14:49:24.394753500,
+Messagem enviada: ADD user1 casa1 sala 
+Resposta: ERRO: Section not found: sala
+
+2026-03-25T14:49:59.817050800,
+Messagem enviada: RD casa1 Electros 
+Resposta: Dispositivo registado com sucesso na casa 'casa1', seção 'Electros'
+
+2026-03-25T14:50:02.196905300,
+Messagem enviada: RD casa1 Electros 
+Resposta: Dispositivo registado com sucesso na casa 'casa1', seção 'Electros'
+
+2026-03-25T14:50:11.785907500,
+Messagem enviada: EC casa1 E1 4 
+Resposta: Dispositivo 'E1' da casa 'casa1 ligado por mais 4 minutos
+
+2026-03-25T14:50:36.643126100,
+Messagem enviada: RD casa1 Garden 
+Resposta: Dispositivo registado com sucesso na casa 'casa1', seção 'Garden'
+

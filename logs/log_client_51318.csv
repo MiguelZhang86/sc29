@@ -1,0 +1,35 @@
+2026-03-25T15:20:13.480930300,
+Messagem enviada: owner_152012 1234 
+Resposta: OK_NEW_USER: Novo utilizador criado e autenticado com sucesso
+
+2026-03-25T15:20:13.494772600,
+Messagem enviada: CREATE casa_152012 
+Resposta: Casa 'casa_152012' criada com sucesso
+
+2026-03-25T15:20:13.500960600,
+Messagem enviada: ADD user_152012 casa_152012 Electros 
+Resposta: Utilizador 'user_152012' adicionado à casa 'casa_152012', seção 'Electros'
+
+2026-03-25T15:20:13.509465200,
+Messagem enviada: RD casa_152012 Electros 
+Resposta: Dispositivo registado com sucesso na casa 'casa_152012', seção 'Electros'
+
+2026-03-25T15:20:13.522323400,
+Messagem enviada: EC casa_152012 E1 15 
+Resposta: Dispositivo 'E1' da casa 'casa_152012 ligado por mais 15 minutos
+
+2026-03-25T15:20:13.528523500,
+Messagem enviada: RT casa_152012 
+Resposta: E1.csv: 2026-03-25T15:20:13.519322900,15
+
+
+2026-03-25T15:20:13.533164300,
+Messagem enviada: RH casa_152012 E1 
+Resposta: Historico do dispositivo 'E1' da casa 'casa_152012':
+2026-03-25T15:20:13.519322900,15
+
+
+2026-03-25T15:20:13.535854200,
+Messagem enviada: EC casa_152012 E1 abc 
+Resposta: ERRO: valor para dispositivo deve ser um inteiro
+

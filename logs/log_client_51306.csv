@@ -1,0 +1,32 @@
+2026-03-25T15:19:23.214929800,
+Messagem enviada: owner_151922 1234 
+Resposta: OK_NEW_USER: Novo utilizador criado e autenticado com sucesso
+
+2026-03-25T15:19:23.238115500,
+Messagem enviada: CREATE casa_151922 
+Resposta: Casa 'casa_151922' criada com sucesso
+
+2026-03-25T15:19:23.242323900,
+Messagem enviada: ADD user_151922 casa_151922 sala 
+Resposta: ERRO: User to allow not found: user_151922
+
+2026-03-25T15:19:23.248285700,
+Messagem enviada: RD casa_151922 sala 
+Resposta: ERRO: User is not allowed to access this section
+
+2026-03-25T15:19:23.252734600,
+Messagem enviada: EC casa_151922 Device1 15 
+Resposta: ERRO: House or Device not found: casa_151922
+
+2026-03-25T15:19:23.259316200,
+Messagem enviada: RT casa_151922 
+Resposta: Nenhum comando registado para a casa 'casa_151922'
+
+2026-03-25T15:19:23.263548200,
+Messagem enviada: RH casa_151922 Device1 
+Resposta: NOPERM
+
+2026-03-25T15:19:23.267196200,
+Messagem enviada: EC casa_151922 Device1 abc 
+Resposta: ERRO: valor para dispositivo deve ser um inteiro
+

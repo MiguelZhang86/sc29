@@ -144,6 +144,11 @@ public class DataManager {
         throw new IllegalArgumentException("House not found: " + houseName);
     }
     public void createHouse(String name, User owner) {
+        for (House h : houses) {
+            if (h.getName().equals(name)) {
+                throw new IllegalArgumentException("House already exists: " + name);
+            }
+        }
         House newHouse = new House(name, owner);
         addHouse(newHouse);
     }
