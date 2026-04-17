@@ -49,6 +49,11 @@ public class SpertaServer {
 	
     //Inicia o servidor no porto especificado por args[0], ou no porto defaultPort se args estiver vazio ou tiver um valor inválido
     public static void main(String[] args) {
+
+        System.setProperty("javax.net.ssl.keyStore", "keystore.server");
+        System.setProperty("javax.net.ssl.keyStorePassword", "Scream");
+        System.setProperty("javax.net.ssl.keyStoreType", "PKCS12");
+
         int port = defaultPort;
         if (args.length >= 1) {
             try {

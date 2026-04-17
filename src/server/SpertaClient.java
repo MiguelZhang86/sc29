@@ -20,6 +20,12 @@ public class SpertaClient {
     private static final int DEFAULT_PORT = 23456;
 
     public static void main(String[] args) {
+
+        System.setProperty("javax.net.ssl.trustStore", "truststore.client");
+        System.setProperty("javax.net.ssl.trustStorePassword", "Scream");
+        System.setProperty("javax.net.ssl.trustStoreType", "PKCS12");
+
+
         String host = DEFAULT_HOST;
         int port = DEFAULT_PORT;
         String username = null;
