@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 /**
  * Classe utilitária para escrever entradas com timestamp num ficheiro de log CSV.
- * teste Cada entrada é prefixada com a data e hora atuais.
+ * Cada entrada é prefixada com a data e hora atuais.
  */
 public class Log{
     private final String fileName;

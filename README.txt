@@ -6,6 +6,24 @@ Jaime Sousa 58171 - Dominio
 Miguel Zhang 61829 - Cliente e Servidor
 Teresa Grangeia 61869 - Historico, Logs e Testagem
 
+## Keystore commands to generate keys and certificates
+
+Keytool -genkeypair -alias spertaServer -keyalg RSA -keysize 2048 -keystore keystore.server
+
+Keytool -list -keystore keystore.server
+
+Keytool -exportcert -alias spertaServer -file certServer.cer -keystore keystore.server
+
+Keytool -importcert -alias spertaServer -file certServer.cer -keystore truststore.client
+
+System.setProperty
+
+Atribuites: Generating 2048-bit RSA key pair and self-signed certificate (SHA384withRSA) with a validity of 90 days                                
+for: CN=Jaime Sousa, OU=DI, O=FCUL, L=Lisboa, ST=Lisboa, C=PT 
+
+pwd: Scream
+     
+
 ## Requisitos
 
 - Java JDK 17+ instalado (com `javac` e `java` no PATH)
