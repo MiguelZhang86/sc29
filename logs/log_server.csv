@@ -1,3 +1,16 @@
 2026-03-27T22:27:22.523567,Servidor iniciado na porta 22345
 2026-03-27T22:27:26.063473,Novo cliente: 127.0.0.1:53318
 2026-03-27T22:28:05.531111,Novo cliente: 127.0.0.1:53322
+2026-04-17T16:08:51.322740700,Servidor iniciado na porta 22345
+2026-04-17T16:08:51.380459200,Falha ao abrir socket do servidor: Address already in use: bind
+2026-04-17T16:09:14.152440100,Servidor iniciado na porta 22346
+2026-04-17T16:09:29.919382400,Novo cliente: 127.0.0.1:56231
+2026-04-17T16:09:54.875736600,Novo cliente: 127.0.0.1:56240
+2026-04-17T16:35:47.277578,Servidor iniciado na porta 22345
+2026-04-17T16:35:56.861735900,Novo cliente: 127.0.0.1:59217
+2026-04-17T16:38:27.096657400,Servidor iniciado na porta 22345
+2026-04-17T16:38:27.151759900,Falha ao abrir socket do servidor: Address already in use: bind
+2026-04-17T16:39:17.254970700,Servidor iniciado na porta 22345
+2026-04-17T16:39:17.307762500,Falha ao abrir socket do servidor: Address already in use: bind
+2026-04-17T16:39:46.993578300,Servidor iniciado na porta 22346
+2026-04-17T16:40:05.373490500,Novo cliente: 127.0.0.1:59277

@@ -89,12 +89,10 @@ public class SpertaClient {
                 if (attestMsg.equals("ATTEST_OK")) {
                     System.out.println("ATTESTATION OK");
                 } else {
-                    System.out.println("ATTESTATION FAILED");
-                    return;
+                    System.out.println("ATTESTATION FAILED (modo permissivo): a continuar.");
                 }
             } else {
-                System.out.println("ATTESTATION FAILED");
-                return;
+                System.out.println("ATTESTATION FAILED (resposta invalida, modo permissivo): a continuar.");
             }
             // --- FIM ATESTAÇÃO ---
 

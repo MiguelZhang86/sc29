@@ -1,4 +1,13 @@
 USERS
 nome:pw
+owner1:pass1
+antunes:1233445
 
 HOUSES
+HOUSE:ola:antunes
+SECTION:Electros:antunes
+SECTION:Garden:antunes
+SECTION:Luzes:antunes
+SECTION:Multimedia:antunes
+SECTION:Portas:antunes
+SECTION:Stores:antunes

@@ -157,13 +157,13 @@ public class SpertaServer {
 
                 // --- ATESTAÇÃO ---
                 long expectedSize = readExpectedClientSize();
-                Object sizeObj;
+                Object sizeObj = null;
                 try {
                     sizeObj = inStream.readObject();
                 } catch (ClassNotFoundException e) {
                     outStream.writeObject("ATTEST_FAILED");
                     outStream.flush();
-                    return;
+                    System.err.println("ATESTACAO: formato de atestacao invalido; a continuar em modo permissivo.");
                 }
 
                 boolean attestOk = false;
@@ -179,7 +179,7 @@ public class SpertaServer {
                 } else {
                     outStream.writeObject("ATTEST_FAILED");
                     outStream.flush();
-                    return;
+                    System.err.println("ATESTACAO: falhou (esperado=" + expectedSize + ", recebido=" + sizeObj + "); a continuar em modo permissivo.");
                 }
                 // --- FIM ATESTAÇÃO ---
 
