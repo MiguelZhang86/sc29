@@ -13,9 +13,12 @@ import java.io.IOException;
 import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+
 import domain.IDomainHandler;
 import domain.AuthEnum;
 import domain.DomainHandler;
@@ -105,7 +108,8 @@ public class SpertaServer {
         domain.DataManager.getInstance().load();
 
         //loop principal do servidor, aceita clientes e cria uma thread para cada um
-        try (ServerSocket sSoc = new ServerSocket(port)) {
+        SSLServerSocketFactory ssf = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+        try (SSLServerSocket sSoc = (SSLServerSocket) ssf.createServerSocket(port)) {
             while (true) {
                 try {
                     Socket inSoc = sSoc.accept();

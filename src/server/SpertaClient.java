@@ -7,12 +7,13 @@ package server;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.ObjectInputFilter.Config;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.net.URISyntaxException;
 import java.util.Scanner;
+
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 public class SpertaClient {
 
@@ -75,7 +76,9 @@ public class SpertaClient {
      * @param password a password, ou null se não fornecida na linha de comandos
      */
     public void chat(String host, int port, Scanner sc, String username, String password) {
-        try (Socket socket = new Socket(host, port);
+        SSLSocketFactory sf = (SSLSocketFactory) SSLSocketFactory.getDefault();
+        try (SSLSocket socket = (SSLSocket) sf.createSocket(host, port);
+            
              ObjectOutputStream outStream = new ObjectOutputStream(socket.getOutputStream());
              ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream())) {
 
