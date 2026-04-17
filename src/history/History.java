@@ -36,12 +36,12 @@ public class History {
     public static String getLastCommand(DomainHandler domainHandler, String houseName) {
         
         File houseDir = new File(BASE_DIR + houseName);
-        if(!houseDir.exists())return null;
+        if(!houseDir.exists())return "NOHM";
 
         StringBuilder res = new StringBuilder();
 
         File[] files = houseDir.listFiles();                                                                                     
-        if (files == null) return null;
+        if (files == null) return "NODATA";
 
         for (File f : files) {
         String deviceName = f.getName().replace(".csv", "");
@@ -57,7 +57,7 @@ public class History {
         }       
     }                                                                                                                        
                 
-    return res.length() > 0 ? res.toString() : null;
+    return res.length() > 0 ? res.toString() : "NOPERM";
 
     }
 
@@ -67,7 +67,7 @@ public class History {
             return "NOPERM";
         }
         File file = new File(BASE_DIR + houseName + "/" + deviceName + ".csv");
-        if(!file.exists()) return null;
+        if(!file.exists()) return "NOD";
 
         StringBuilder res = new StringBuilder();
         try( BufferedReader br = new BufferedReader(new FileReader(file))){

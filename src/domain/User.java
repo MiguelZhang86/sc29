@@ -4,38 +4,25 @@
 package domain;
 
 import java.util.Objects;
+import org.mindrot.jbcrypt.BCrypt;
 
 public final class User {
     private final String name;
-    private final String pw;
+    private final String pwHash;
 
-    /**
-     * Creates a user with a name.
-     *
-     * @param name the user name
-     * @param pw the user password
-     */
-    User(String name, String pw) {
-        this.name = Objects.requireNonNull(name, "name cannot be null");
-        this.pw = Objects.requireNonNull(pw, "pw cannot be null");
+    User(String name, String pwHash) {
+        this.name = Objects.requireNonNull(name, "name cannot be null")
+                   .trim()
+                   .toLowerCase();
+        this.pwHash = Objects.requireNonNull(pwHash, "pw cannot be null");
     }
 
-    /**
-     * Gets the user name.
-     *
-     * @return the user name
-     */
     String getName() {
         return name;
     }
-    /**
-     * Checks whether the provided password matches the user's password.
-     *
-     * @param pw the password to check
-     * @return true if the password matches, false otherwise
-     */
-    boolean isPassword(String pw) {
-        return this.pw.equals(pw);
+
+    boolean authenticate(String password) {
+        return BCrypt.checkpw(password, this.pwHash);
     }
 
     @Override
@@ -45,11 +32,9 @@ public final class User {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof User) {
-            User u = (User) o;
-            return this.name.equals(u.name);
-        }
-        return false;
+        if (this == o) return true;
+        if (!(o instanceof User u)) return false;
+        return name.equals(u.name);
     }
 
     @Override
@@ -57,13 +42,7 @@ public final class User {
         return this.name.hashCode();
     }
 
-    boolean authenticate(String pw) {
-        return this.pw.equals(pw);
-    }
-
     String toText(){
-        return this.name+ ":" + this.pw;
+        return this.name + ":" + this.pwHash;
     }
-
-
 }

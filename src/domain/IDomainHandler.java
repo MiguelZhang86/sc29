@@ -8,14 +8,17 @@ public interface IDomainHandler {
     //CREATE <hm> - O utilizador é owner
     void createHouse(String name);
 
+    //Verifica se a casa foi criada com sucesso ou não
+    boolean isHouseCreated(String name);
+
     //RD <hm> <s> # Registar um Dispositivo na casa <hm>, na seção <s>
-    void registerDevice(String houseName, String sectionName);
+    String registerDevice(String houseName, String sectionName);
 
     // EC <hm> <d> <int> # Utilizador logado tenta mudar valor do dispositivo
-    void addDeviceTime(String houseName, String deviceName, int value);
+    String addDeviceTime(String houseName, String deviceName, int value);
 
     // ADD <user1> <hm> <s> # Autorizar utilizador <user1> à casa <hm>, seção <s>.
-    boolean allowUser(String userName, String houseName, String sectionName);
+    String allowUser(String userName, String houseName, String sectionName);
 
     //Bonus
     boolean isAnyoneAuthenticated();

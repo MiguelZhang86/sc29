@@ -6,13 +6,19 @@ package server;
 *	Boa sorte Miguel :p
 ***************************************************************************/
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+
 import domain.IDomainHandler;
 import domain.AuthEnum;
 import domain.DomainHandler;
@@ -22,7 +28,7 @@ import history.Log;
 //Servidor SpertaServer
 
 public class SpertaServer {
-    public static final int defaultPort = 23456;
+    public static final int defaultPort = 22345;
     public static String menuDeOpcoes = """
 			Comandos disponiveis:
 			CREATE <hm> 
@@ -46,6 +52,11 @@ public class SpertaServer {
 	
     //Inicia o servidor no porto especificado por args[0], ou no porto defaultPort se args estiver vazio ou tiver um valor inválido
     public static void main(String[] args) {
+
+        System.setProperty("javax.net.ssl.keyStore", "keystore.server");
+        System.setProperty("javax.net.ssl.keyStorePassword", "Scream");
+        System.setProperty("javax.net.ssl.keyStoreType", "PKCS12");
+
         int port = defaultPort;
         if (args.length >= 1) {
             try {
@@ -59,7 +70,11 @@ public class SpertaServer {
         server.startServer(port);
     }
 
-    // Método auxiliar para escrever no log do servidor, caso este tenha sido criado com sucesso
+    /**
+     * Escreve uma mensagem no log do servidor, caso este tenha sido criado com sucesso.
+     * @param serverLog o log do servidor, pode ser null
+     * @param message a mensagem a escrever
+     */
     private void writeServerLog(Log serverLog, String message) {
         if (serverLog == null) {
             return;
@@ -90,10 +105,11 @@ public class SpertaServer {
 
         // Atestar o DataManager para carregar os dados do sistema antes de aceitar clientes
         // Não implementado, espero pela teresa
-        // domain.DataManager.getInstance().load();
+        domain.DataManager.getInstance().load();
 
         //loop principal do servidor, aceita clientes e cria uma thread para cada um
-        try (ServerSocket sSoc = new ServerSocket(port)) {
+        SSLServerSocketFactory ssf = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+        try (SSLServerSocket sSoc = (SSLServerSocket) ssf.createServerSocket(port)) {
             while (true) {
                 try {
                     Socket inSoc = sSoc.accept();
@@ -142,6 +158,35 @@ public class SpertaServer {
             try (ObjectOutputStream outStream = new ObjectOutputStream(socket.getOutputStream());
                  ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream())) {
                 Log clientLog = new Log("logs/log_client_" + socket.getPort() + ".csv");
+
+                // --- ATESTAÇÃO ---
+                long expectedSize = readExpectedClientSize();
+                Object sizeObj = null;
+                try {
+                    sizeObj = inStream.readObject();
+                } catch (ClassNotFoundException e) {
+                    outStream.writeObject("ATTEST_FAILED");
+                    outStream.flush();
+                    System.err.println("ATESTACAO: formato de atestacao invalido; a continuar em modo permissivo.");
+                }
+
+                boolean attestOk = false;
+                if (sizeObj instanceof Long receivedSize) {
+                    if (expectedSize >= 0 && receivedSize.equals(expectedSize)) {
+                        attestOk = true;
+                    }
+                }
+
+                if (attestOk) {
+                    outStream.writeObject("ATTEST_OK");
+                    outStream.flush();
+                } else {
+                    outStream.writeObject("ATTEST_FAILED");
+                    outStream.flush();
+                    System.err.println("ATESTACAO: falhou (esperado=" + expectedSize + ", recebido=" + sizeObj + "); a continuar em modo permissivo.");
+                }
+                // --- FIM ATESTAÇÃO ---
+
                 while (true) {
                     Object request;
                     try {
@@ -186,6 +231,12 @@ public class SpertaServer {
             }
         }
 	
+        /**
+         * Interpreta e executa um comando recebido do cliente, verificando a autenticação
+         * e retornando o código de resposta adequado.
+         * @param request a string de comando recebida
+         * @return a string de resposta a enviar ao cliente
+         */
         private String processRequest(String request) {
             String[] arguments = request.split(" ");
 
@@ -207,17 +258,16 @@ public class SpertaServer {
             if (arguments[0].equals("CREATE") && arguments.length == 2) {
                 try {
                     this.domainHandler.createHouse(arguments[1]);
-                    return "Casa '" + arguments[1] + "' criada com sucesso";
+                    return this.domainHandler.isHouseCreated(arguments[1])? "OK" : "NOK";
                 } catch (IllegalArgumentException e) {
-                    return "ERRO: " + e.getMessage();
+                    return "NOK";
                 }
             }
 
 				//RD <hm> <s> # Registar um Dispositivo na casa <hm>, na seção <s>
             if (arguments[0].equals("RD") && arguments.length == 3) {
                 try {
-                    this.domainHandler.registerDevice(arguments[1], arguments[2]);
-                    return "Dispositivo registado com sucesso na casa '" + arguments[1] + "', seção '" + arguments[2] + "'";
+                    return this.domainHandler.registerDevice(arguments[1], arguments[2]);
                 } catch (IllegalArgumentException e) {
                     return "ERRO: " + e.getMessage();
                 }
@@ -227,21 +277,22 @@ public class SpertaServer {
             if (arguments[0].equals("EC") && arguments.length == 4) {
                 try {
                     int value = Integer.parseInt(arguments[3]);
-                    this.domainHandler.addDeviceTime(arguments[1], arguments[2], value);
-                    History.registerCommand(arguments[1] + "," + arguments[2] + "," + arguments[3]);
-                    return "Dispositivo '" + arguments[2] + "' da casa '" + arguments[1] + " ligado por mais " + value + " minutos";
+                    String m = this.domainHandler.addDeviceTime(arguments[1], arguments[2], value);
+                    if(m.equals("OK")){
+                        History.registerCommand(arguments[1] + "," + arguments[2] + "," + arguments[3]);
+                    }
+                    return m;
                 } catch (NumberFormatException e) {
-                    return "ERRO: valor para dispositivo deve ser um inteiro";
+                    return "NOK";
                 } catch (IllegalArgumentException e) {
-                    return "ERRO: " + e.getMessage();
+                    return "NOK";
                 } 
             }
 
 				//ADD <user1> <hm> <s> # Autorizar utilizador <user1> à casa <hm>, seção <s>.
             if (arguments[0].equals("ADD") && arguments.length == 4) {
                 try {
-                    this.domainHandler.allowUser(arguments[1], arguments[2], arguments[3]);
-                    return "Utilizador '" + arguments[1] + "' adicionado à casa '" + arguments[2] + "', seção '" + arguments[3] + "'";
+                    return this.domainHandler.allowUser(arguments[1], arguments[2], arguments[3]);
                 } catch (IllegalArgumentException e) {
                     return "ERRO: " + e.getMessage();
                 }
@@ -253,11 +304,10 @@ public class SpertaServer {
 				// que o utilizador tenha permissões.
             if (arguments[0].equals("RT") && arguments.length == 2) {
                 try {
-                    String lastCommands = History.getLastCommand((DomainHandler) this.domainHandler, arguments[1]);
-                    if (lastCommands == null) {
-                        return "Nenhum comando registado para a casa '" + arguments[1] + "'";
-                    }
-                    return lastCommands;
+                    String last = History.getLastCommand((DomainHandler) this.domainHandler, arguments[1]);                                                            
+                    if (last.equals("NOHM") || last.equals("NODATA") || last.equals("NOPERM")) return last;                                                            
+                    return "OK," + last.getBytes().length + "," + last;
+                    
                 } catch (IllegalArgumentException e) {
                     return "ERRO: " + e.getMessage();
                 }
@@ -274,8 +324,15 @@ public class SpertaServer {
                     if(history.equals("NOPERM")){
                         return history;
                     }
-
-                    return "Historico do dispositivo '" + arguments[2] + "' da casa '" + arguments[1] + "':\n" + history;
+                    if (history.equals("NOHM")){ 
+                        return history; 
+                    }
+                    if (history.equals("NOD")) {
+                        return history;
+                    }
+                    if (history.equals("NODATA")) return history;
+                    //Falta determinar o tamanho do ficheiro
+                    return "OK," + history.getBytes().length + "," + history;
                 } catch (IllegalArgumentException e) {
                     return "ERRO: " + e.getMessage();
                 }
@@ -289,20 +346,50 @@ public class SpertaServer {
 		 * @param password
 		 * @return String indicando o resultado da autenticação, que pode ser uma mensagem de sucesso ou um erro
 		 */
+        /**
+         * Autentica o cliente com as credenciais fornecidas.
+         * @param username o nome do utilizador
+         * @param password a password
+         * @return WRONG-PWD, OK-NEW-USER ou OK-USER
+         */
         private String authenticate(String username, String password) {
 
             AuthEnum authResult = this.domainHandler.authenticateUser(username, password);
 
             if (authResult == AuthEnum.WRONG_PWD) {
-                return "ERRO: WRONG_PWD: Credenciais invalidas";
+                return "WRONG-PWD";
             }
             if (authResult == AuthEnum.OK_NEW_USER) {
-                return "OK_NEW_USER: Novo utilizador criado e autenticado com sucesso";
+                return "OK-NEW-USER";
             }
             if (authResult == AuthEnum.OK_USER) {
-                return "OK_USER: Utilizador autenticado com sucesso";
+                return "OK-USER";
             }
             return "ERRO: resultado de autenticação inesperado";
+        }
+
+        /**
+         * Lê o tamanho esperado do cliente a partir do ficheiro de referência SpertaClient.txt.
+         * O ficheiro deve conter uma linha no formato: SpertaClient:{tamanho}
+         * Retorna -1 se o ficheiro não existir, estiver mal formatado ou não puder ser lido.
+         */
+        private long readExpectedClientSize() {
+            File ref = new File("SpertaClient.txt");
+            if (!ref.exists()) {
+                System.err.println("ATESTACAO: ficheiro SpertaClient.txt nao encontrado.");
+                return -1;
+            }
+            try (BufferedReader br = new BufferedReader(new FileReader(ref))) {
+                String line = br.readLine();
+                if (line == null || !line.startsWith("SpertaClient:")) {
+                    System.err.println("ATESTACAO: formato invalido em SpertaClient.txt");
+                    return -1;
+                }
+                return Long.parseLong(line.substring("SpertaClient:".length()).trim());
+            } catch (IOException | NumberFormatException e) {
+                System.err.println("ATESTACAO: erro a ler SpertaClient.txt: " + e.getMessage());
+                return -1;
+            }
         }
     }
 }

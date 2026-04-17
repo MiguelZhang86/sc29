@@ -48,3 +48,12 @@
 2026-03-25T16:06:47.330169200,Servidor iniciado na porta 23457
 2026-03-25T16:06:47.368170500,Falha ao abrir socket do servidor: Address already in use: bind
 2026-03-25T16:06:57.816133700,Servidor iniciado na porta 34567
+2026-03-27T21:21:54.136131600,Servidor iniciado na porta 22345
+2026-03-27T21:22:03.931710600,Novo cliente: 127.0.0.1:2499
+2026-03-27T21:41:21.622303,Servidor iniciado na porta 22345
+2026-03-27T21:41:21.649230,Falha ao abrir socket do servidor: Address already in use: bind
+2026-03-27T21:42:14.198517800,Novo cliente: 127.0.0.1:2886
+2026-03-27T21:45:39.385135700,Servidor iniciado na porta 22345
+2026-03-27T21:45:39.414329600,Falha ao abrir socket do servidor: Address already in use: bind
+2026-03-27T21:45:52.655238500,Servidor iniciado na porta 23456
+2026-03-27T22:22:52.700100500,Novo cliente: 127.0.0.1:3930
