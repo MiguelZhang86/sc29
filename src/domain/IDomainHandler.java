@@ -1,39 +1,40 @@
 package domain;
 
+/**
+ * Interface que define as operações disponíveis numa sessão de cliente conectado.
+ * As implementações são responsáveis por verificar a autenticação e delegar
+ * ao DataManager.
+ */
 public interface IDomainHandler {
-    
-    //AUTH <username> <password>
+
+    /** Autentica o utilizador com as credenciais fornecidas. */
     AuthEnum authenticateUser(String username, String password);
-    
-    //CREATE <hm> - O utilizador é owner
+
+    /** Cria uma nova casa cujo dono é o utilizador autenticado. */
     void createHouse(String name);
 
-    //Verifica se a casa foi criada com sucesso ou não
+    /** Retorna true se uma casa com o nome indicado existir. */
     boolean isHouseCreated(String name);
 
-    //RD <hm> <s> # Registar um Dispositivo na casa <hm>, na seção <s>
+    /** Regista um novo dispositivo na seção indicada da casa indicada. */
     String registerDevice(String houseName, String sectionName);
 
-    // EC <hm> <d> <int> # Utilizador logado tenta mudar valor do dispositivo
+    /** Envia um valor para um dispositivo (0=desligar, 1=ligar, 2-600=ligar por x minutos). */
     String addDeviceTime(String houseName, String deviceName, int value);
 
-    // ADD <user1> <hm> <s> # Autorizar utilizador <user1> à casa <hm>, seção <s>.
+    /** Concede permissão a um utilizador para gerir uma seção (ou todas) de uma casa. */
     String allowUser(String userName, String houseName, String sectionName);
 
-    //Bonus
+    /** Retorna true se algum utilizador estiver autenticado nesta sessão. */
     boolean isAnyoneAuthenticated();
 
-    //EXIT
+    /** Termina a sessão do utilizador autenticado. */
     void logout();
 
-
-    //Bonus para o log, diz se o user autenticado tem permissão para aceder a uma seção da casa
+    /** Retorna true se o utilizador autenticado puder aceder à seção ou dispositivo indicados. */
     boolean isUserAllowed(String houseName, String sectionName);
 
-
-
-
-
-
+    /** Retorna true se o dispositivo indicado estiver registado na casa indicada. */
+    boolean isDeviceRegistered(String houseName, String deviceName);
 }
     

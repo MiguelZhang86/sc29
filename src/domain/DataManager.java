@@ -4,6 +4,11 @@ import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Singleton que gere todos os dados persistentes do sistema Sperta,
+ * incluindo utilizadores, casas, seções e dispositivos.
+ * Carrega e guarda o estado no ficheiro usersData.txt.
+ */
 public class DataManager {
 
     public static final DataManager INSTANCE = new DataManager();
@@ -19,6 +24,10 @@ public class DataManager {
         // Private constructor to prevent instantiation
     }
 
+    /**
+     * Carrega utilizadores, casas, seções e dispositivos a partir do ficheiro usersData.txt.
+     * Deve ser chamado uma vez no arranque do servidor.
+     */
     public void load() {
         File f = new File(DATA_FILE);
         if (!f.exists()) return;
@@ -88,10 +97,21 @@ public class DataManager {
         }
     }
 
+    /**
+     * Retorna a instância singleton do DataManager.
+     * @return a instância do DataManager
+     */
     public static DataManager getInstance() {
         return INSTANCE;
     }
 
+    /**
+     * Autentica um utilizador pelo nome e password.
+     * Se o utilizador não existir, regista-o como novo utilizador.
+     * @param username o nome do utilizador
+     * @param password a password
+     * @return um AuthResult com o resultado e o objeto utilizador, se bem-sucedido
+     */
     public AuthResult authenticateUser(String username, String password) {
         for (User user : users) {
             if (user.getName().equals(username)) {
@@ -106,20 +126,52 @@ public class DataManager {
         // If user not found, create a new one
         User newUser = new User(username, password);
         users.add(newUser);
+        this.save();
         return new AuthResult(newUser, AuthEnum.OK_NEW_USER);
     }
+    /**
+     * Adiciona uma casa ao sistema, caso ainda não exista.
+     * @param house a casa a adicionar
+     */
     public void addHouse(House house) {
         if (!houses.contains(house)) {
             houses.add(house);
         }
     }
 
+    /**
+     * Verifica se uma casa com o nome indicado existe no sistema.
+     * @param name o nome da casa
+     * @return true se a casa existir, false caso contrário
+     */
+    public boolean isHouseCreated(String name){
+        boolean exist = false;
+        for (House h : houses) {
+            if (h.getName().equals(name)) {
+                exist = true;
+            }
+        }
+        return exist;
+    }
+
+    /**
+     * Adiciona um utilizador ao sistema, caso ainda não exista.
+     * @param user o utilizador a adicionar
+     */
     public void addUser(User user) {
         if (!users.contains(user)) {
             users.add(user);
         }
     }
 
+    /**
+     * Verifica se um utilizador tem permissão para aceder a uma seção ou dispositivo de uma casa.
+     * Se sectionName for nulo ou vazio, verifica todas as seções.
+     * @param houseName o nome da casa
+     * @param sectionName a primeira letra da seção, o nome do dispositivo, ou nulo/vazio para todas
+     * @param user o utilizador a verificar
+     * @return true se o utilizador tiver permissão, false caso contrário
+     */
     public boolean isUserAllowed(String houseName, String sectionName, User user) {
         House house = getHouse(houseName);
         if (sectionName == null || sectionName.isEmpty()) {
@@ -135,6 +187,12 @@ public class DataManager {
         return house.isUserAllowed(user, sectionName);
     }
 
+    /**
+     * Retorna a casa com o nome indicado.
+     * @param houseName o nome da casa
+     * @return a casa correspondente
+     * @throws IllegalArgumentException se a casa não existir
+     */
     private House getHouse(String houseName) {
         for (House house : houses) {
             if (house.getName().equals(houseName)) {
@@ -143,6 +201,12 @@ public class DataManager {
         }
         throw new IllegalArgumentException("House not found: " + houseName);
     }
+    /**
+     * Cria uma nova casa com o nome e dono indicados e guarda o estado.
+     * @param name o nome da casa
+     * @param owner o utilizador dono
+     * @throws IllegalArgumentException se a casa já existir
+     */
     public void createHouse(String name, User owner) {
         for (House h : houses) {
             if (h.getName().equals(name)) {
@@ -151,39 +215,68 @@ public class DataManager {
         }
         House newHouse = new House(name, owner);
         addHouse(newHouse);
+        this.save();
     }
 
 
-    public void registerDevice(String houseName, String sectionName, User user) {
-        if (!isUserAllowed(houseName, sectionName, user)) {
-            throw new IllegalArgumentException("User is not allowed to access this section");
+    /**
+     * Regista um novo dispositivo na seção indicada da casa indicada.
+     * Apenas o dono da casa pode registar dispositivos.
+     * @param houseName o nome da casa
+     * @param sectionName o identificador da seção (primeira letra)
+     * @param user o utilizador que faz o pedido
+     * @return OK, NOHM ou NOPERM
+     */
+    public String registerDevice(String houseName, String sectionName, User user) {
+        if (!isHouseCreated(houseName)) return "NOHM";
+        if (!getHouse(houseName).isOwner(user)) {
+            return "NOPERM";
         }
         for (House house : houses) {
             if (house.getName().equals(houseName)) {
                 for (Section section : house.getSections()) {
-                    if (section.getName().equals(sectionName)) {
+                    if (section.getName().charAt(0) == sectionName.charAt(0)) {
                         section.registerDevice("Device" + (section.devicesCount() + 1));
-                        return;
+                        this.save();
+                        return "OK";
                     }
                 }
                 throw new IllegalArgumentException("Section not found: " + sectionName);
             }
         }
-        throw new IllegalArgumentException("House not found: " + houseName);
+        return "NOHM";
     }
 
-    public void addDeviceTime(String houseName, String deviceName, int value, User user) {
+    /**
+     * Envia um valor para um dispositivo, atualizando o seu estado.
+     * @param houseName o nome da casa
+     * @param deviceName o nome do dispositivo
+     * @param value 0 (desligar), 1 (ligar), ou 2-600 (ligar por x minutos)
+     * @param user o utilizador que faz o pedido
+     * @return OK, NOHM, NOD ou NOPERM
+     */
+    public String addDeviceTime(String houseName, String deviceName, int value, User user) {
+        if (!isHouseCreated(houseName)) return "NOHM";                                                                                                             
+        if (getHouse(houseName).hasSection(deviceName)) return "NOD";
+        if (!isDeviceRegistered(houseName, deviceName)) return "NOD";                                                                                              
+        if (!isUserAllowed(houseName, deviceName, user)) return "NOPERM";
         for (House house : houses) {
             if (house.getName().equals(houseName)) {
                 //percorre as sections da casa e tenta ligar o dispositivo - se conseguir, retorna
                 if (house.turnOnDevice(user, deviceName, value)) {
-                    return;
+                    return "OK";
                 }
             }
         }
-        throw new IllegalArgumentException("House or Device not found: " + houseName);
+        return "NOHM";
     }
 
+    /**
+     * Verifica se um utilizador tem permissão em todas as seções de uma casa.
+     * @param houseName o nome da casa
+     * @param authenticatedUser o utilizador a verificar
+     * @return true se tiver permissão em todas as seções ou for o dono
+     */
     public boolean isUserAllowedInAllSections(String houseName, User authenticatedUser) {
         for (House house : houses) {
             if (house.getName().equals(houseName)) {
@@ -193,6 +286,9 @@ public class DataManager {
         throw new IllegalArgumentException("House not found: " + houseName);
     }
 
+    /**
+     * Persiste todos os utilizadores, casas, seções e dispositivos no ficheiro usersData.txt.
+     */
     public void save() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(DATA_FILE))) {
             bw.write("USERS");
@@ -212,24 +308,33 @@ public class DataManager {
         }
     }
 
-    public boolean allowUser(User authenticatedUser, String userName, String houseName, String sectionName) {
+    /**
+     * Concede permissão a um utilizador para gerir uma seção (ou todas) de uma casa.
+     * Apenas o dono da casa pode conceder permissões.
+     * @param authenticatedUser o utilizador que faz o pedido (deve ser o dono)
+     * @param userName o utilizador a quem conceder acesso
+     * @param houseName o nome da casa
+     * @param sectionName o identificador da seção ou "all"
+     * @return OK, NOHM, NOPERM ou NOUSER
+     */
+    public String allowUser(User authenticatedUser, String userName, String houseName, String sectionName) {
         if (authenticatedUser == null) {
-            throw new IllegalArgumentException("Authenticated user is required");
+            return "NOPERM";
         }
         if (userName == null || userName.trim().isEmpty()) {
-            throw new IllegalArgumentException("User name is required");
+            return "NOUSER";
         }
         if (houseName == null || houseName.trim().isEmpty()) {
-            throw new IllegalArgumentException("House name is required");
+            return "NOHM";
         }
         if (sectionName == null || sectionName.trim().isEmpty()) {
             throw new IllegalArgumentException("Section name is required");
         }
-
+        if (!isHouseCreated(houseName)) return "NOHM";
         House house = getHouse(houseName);
 
         if (!house.isOwner(authenticatedUser)) {
-            throw new IllegalArgumentException("Only the owner can allow users");
+            return "NOPERM";
         }
 
         User userToAllow = null;
@@ -240,12 +345,29 @@ public class DataManager {
             }
         }
         if (userToAllow == null) {
-            throw new IllegalArgumentException("User to allow not found: " + userName);
+            return "NOUSER";
         }
         if (!house.allowUser(authenticatedUser, userToAllow, sectionName)) {
             throw new IllegalArgumentException("Section not found: " + sectionName);
         }
-        return true;
+        this.save();
+        return "OK";
     }
-    
+
+    /**
+     * Verifica se um dispositivo está registado numa casa.
+     * @param houseName o nome da casa
+     * @param deviceName o nome do dispositivo
+     * @return true se o dispositivo existir, false caso contrário
+     */
+    public boolean isDeviceRegistered(String houseName, String deviceName) {                                                                                   
+      for (House house : houses) {                                        
+          if (house.getName().equals(houseName)) {                                                                                                           
+              for (Section section : house.getSections()) {
+                  if (section.hasDevice(deviceName)) return true;
+              }
+          }
+      }
+      return false;
+    }
 }

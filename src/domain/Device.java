@@ -6,7 +6,6 @@ package domain;
 public class Device{
     private String name;
     private int upTime;
-    private boolean turnOn;
 
     /**
      * Representa um device numa section
@@ -16,7 +15,6 @@ public class Device{
     Device(String name) {
         this.name = name;
         this.upTime = 0;
-        this.turnOn = false;
     }
     /**
     * Turns on the device for a certain amount of time.
@@ -25,16 +23,13 @@ public class Device{
     */
     void turnOn(int time) {
         if (time < 0 || time > 600) {
-            throw new IllegalArgumentException("Device value/time can not be negative or bigger tan 600.");
+            throw new IllegalArgumentException("Device value/time must be between than 0 and 600.");
         }
         if(time == 0){
-            turnOn = false;
+            this.upTime = 0;
+        } else{
+            this.upTime += time;
         }
-        if(time == 1){
-            turnOn = true;
-        }
-        this.upTime += time;
-        turnOn = true;
     }
     /**
      * Gets the name of the device.
@@ -46,12 +41,5 @@ public class Device{
 
     int getUpTime() {
         return upTime;
-    }
-    /**
-     * Gets the status of the device.
-     * @return true if turn on false if turn false
-     */
-    boolean getStatus(){
-        return turnOn;
     }
 }

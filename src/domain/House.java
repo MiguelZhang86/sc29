@@ -63,8 +63,14 @@ public class House {
 	 */
 	boolean allowUser(User owner, User user, String  sectionName) {
 		if (isOwner(owner)) {
+			if (sectionName.equals("all")) {
+				for (Section s : sections) {
+					s.addAllowedUser(user);
+				}
+				return true;
+			}
 			for (Section s : sections) {
-				if (s.getName().equals(sectionName)) {
+				if (s.getName().charAt(0) == sectionName.charAt(0)) {
 					s.addAllowedUser(user);
 					return true;
 				}
@@ -101,18 +107,20 @@ public class House {
 
 	boolean isUserAllowedInSection(User user, String sectionName) {
 		for (Section s : sections) {
-			if (s.getName().equals(sectionName)) {
-				return s.isUserAllowed(user) || isOwner(user);
-			}
+			boolean match = sectionName.length() == 1
+				? s.getName().charAt(0) == sectionName.charAt(0)
+				: s.getName().equals(sectionName);
+			if (match) return s.isUserAllowed(user) || isOwner(user);
 		}
 		return false;
 	}
 
 	boolean hasSection(String sectionName) {
 		for (Section s : sections) {
-			if (s.getName().equals(sectionName)) {
-				return true;
-			}
+			boolean match = sectionName.length() == 1
+				? s.getName().charAt(0) == sectionName.charAt(0)
+				: s.getName().equals(sectionName);
+			if (match) return true;
 		}
 		return false;
 	}
