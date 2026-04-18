@@ -10,6 +10,12 @@ package domain;
 public class DomainHandler implements IDomainHandler {
     private User authenticatedUser;
     private DataManager dm;
+    //Controlo de sessão
+    private long loginTime;
+    private static final long SESSION_TIMEOUT = 10 * 60 * 1000; // 10 min
+    //Simples proteção contra brute force
+    private int failedAttempts = 0;
+    private static final int MAX_ATTEMPTS = 5;
 
     public DomainHandler() {
         this.authenticatedUser = null;
@@ -25,15 +31,17 @@ public class DomainHandler implements IDomainHandler {
     public AuthEnum authenticateUser(String username, String password) {
         AuthResult authentication = dm.authenticateUser(username, password);
         if (authentication.getAuthEnum() == AuthEnum.WRONG_PWD) {
+            failedAttempts++;
+            if (failedAttempts >= MAX_ATTEMPTS) {
+                failedAttempts = 0;
+                throw new IllegalStateException("Demasiadas tentativas falhadas");
+            }
             return AuthEnum.WRONG_PWD;
-        } else if (authentication.getAuthEnum() == AuthEnum.OK_NEW_USER) {
-            this.authenticatedUser = authentication.getUser();
-            return AuthEnum.OK_NEW_USER;
-        } else {
-            this.authenticatedUser = authentication.getUser();
-            return AuthEnum.OK_USER;
         }
-
+        this.authenticatedUser = authentication.getUser();
+        this.loginTime = System.currentTimeMillis();
+        failedAttempts = 0;
+        return authentication.getAuthEnum();
     }
 
     /**
@@ -43,13 +51,14 @@ public class DomainHandler implements IDomainHandler {
      * @return true se tiver permissão, false caso contrário
      */
     public boolean isUserAllowed(String houseName, String sectionName) {
-        isAnyoneAuthenticated(); //throws if no user is authenticated
+        requireAuth(); //throws if no user is authenticated
         return dm.isUserAllowed(houseName, sectionName, this.authenticatedUser);
     }
 
     /** Termina a sessão do utilizador atual. */
     public void logout() {
         authenticatedUser = null;
+        loginTime = 0;
     }
 
     @Override
@@ -58,7 +67,7 @@ public class DomainHandler implements IDomainHandler {
      * @param name o nome da casa
      */
     public void createHouse(String name) {
-        isAnyoneAuthenticated(); //throws if no user is authenticated
+        requireAuth(); //throws if no user is authenticated
         dm.createHouse(name, this.authenticatedUser);
     }
 
@@ -80,7 +89,7 @@ public class DomainHandler implements IDomainHandler {
      * @return OK, NOHM ou NOPERM
      */
     public String registerDevice(String houseName, String sectionName) {
-        isAnyoneAuthenticated(); //throws if no user is authenticated
+        requireAuth(); //throws if no user is authenticated
         return dm.registerDevice(houseName, sectionName, this.authenticatedUser);
     }
 
@@ -93,7 +102,7 @@ public class DomainHandler implements IDomainHandler {
      * @return OK, NOHM, NOD ou NOPERM
      */
     public String addDeviceTime(String houseName, String deviceName, int value) {
-        isAnyoneAuthenticated(); //throws if no user is authenticated
+        requireAuth(); //throws if no user is authenticated
         return dm.addDeviceTime(houseName, deviceName, value, this.authenticatedUser);
     }
     /**
@@ -102,7 +111,7 @@ public class DomainHandler implements IDomainHandler {
      * @return true se tiver permissão em todas as seções ou for o dono
      */
     public boolean isUserAllowedInAllSections(String houseName) {
-        isAnyoneAuthenticated(); //throws if no user is authenticated
+        requireAuth(); //throws if no user is authenticated
         return dm.isUserAllowedInAllSections(houseName, this.authenticatedUser);
     }
 
@@ -111,7 +120,17 @@ public class DomainHandler implements IDomainHandler {
      * @return true se houver um utilizador autenticado, false caso contrário
      */
     public boolean isAnyoneAuthenticated() {
-        return this.authenticatedUser != null;
+        if(this.authenticatedUser == null){
+            return false;
+        }
+
+        // verifica expiração
+        long now = System.currentTimeMillis();
+        if(now - loginTime > SESSION_TIMEOUT){
+            logout();
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -123,7 +142,7 @@ public class DomainHandler implements IDomainHandler {
      * @return OK, NOHM, NOPERM ou NOUSER
      */
     public String allowUser(String userName, String houseName, String sectionName) {
-        isAnyoneAuthenticated(); //throws if no user is authenticated
+        requireAuth(); //throws if no user is authenticated
         return dm.allowUser(this.authenticatedUser, userName, houseName, sectionName);
     }
 
@@ -137,4 +156,11 @@ public class DomainHandler implements IDomainHandler {
     public boolean isDeviceRegistered(String houseName, String deviceName) {
       return dm.isDeviceRegistered(houseName, deviceName);
     }
+
+    private void requireAuth() {
+    if (!isAnyoneAuthenticated()) {
+        throw new IllegalStateException("Utilizador não autenticado ou sessão expirada");
+    }
+    this.loginTime = System.currentTimeMillis(); //Assim evita fazer login de 10 em 10 minutos
+}
 }
